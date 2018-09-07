@@ -11,9 +11,21 @@ async function main() {
     }
 
     for (let link in links) {
-      fs.appendFile('recipeLinks.txt', `${links[link]}\n`, (e) => {
-        if (e) throw e;
-      });
+      if (/\d/.test(links[link])) {
+        if (links[link].includes('minute') || links[link].includes('ingredient') || links[link].includes('-2')) {
+          fs.appendFile('recipeLinks.txt', `${links[link]}\n`, (e) => {
+            if (e) throw e;
+          });
+        }
+      }
+      else if (links[link].includes('how-to')) {
+        // dont add
+      }
+      else {
+        fs.appendFile('recipeLinks.txt', `${links[link]}\n`, (e) => {
+          if (e) throw e;
+        });
+      }
     }
   }
   catch (e) {
