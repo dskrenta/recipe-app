@@ -19,6 +19,9 @@ const schema = gql`
     servings: Float
     cusine: String
     course: String
+    createdAt: String!
+    chef: Chef
+    review: Float
   }
 
   type Nutrition {
@@ -50,6 +53,12 @@ const schema = gql`
     vitaminCDailyValue: Float
     iron: Float
     ironDailyValue: Float
+  }
+
+  type Chef {
+    name: String
+    avatar: String
+    url: String
   }
 
   type Pagination {

@@ -5,11 +5,12 @@ const elasticsearch = require('elasticsearch');
 
 const schema = require('./schema');
 const resolvers = require('./resolvers');
+const { ES_ENDPOINT } = require('./utils/constants');
 
 const PORT = 4000;
 
 const client = new elasticsearch.Client({
-  host: 'http://localhost:9200',
+  host: ES_ENDPOINT,
   log: 'trace'
 });
 

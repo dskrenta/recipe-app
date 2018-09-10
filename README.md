@@ -49,7 +49,13 @@ Directory for all scraping resources, materials, and associated data
     sodium: 1008,
     cholesterol: 14 
   },
-  url: 'https://www.myrecipes.com/recipe/parmesan-risotto'
+  url: 'https://www.myrecipes.com/recipe/parmesan-risotto',
+  review: 4.9,
+  chef: {
+    name: 'Chef John'
+    avatar: 'https://secureimages.allrecipes.com/userphotos/250x250/2267470.jpg',
+    url: 'https://www.allrecipes.com/cook/foodwisheswithchefjohn/'
+  }
 }
 ```
 
@@ -72,6 +78,9 @@ type Recipe {
   servings: Float
   cusine: String
   course: String
+  createdAt: String!
+  chef: Chef
+  review: Float
 }
 
 type Nutrition {
@@ -103,5 +112,11 @@ type Nutrition {
   vitaminCDailyValue: Float
   iron: Float
   ironDailyValue: Float
+}
+
+type Chef {
+  name: String
+  avatar: String
+  url: String
 }
 ```
