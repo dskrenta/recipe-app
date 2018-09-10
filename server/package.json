@@ -4,6 +4,9 @@
   "description": "recipe-app",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --watch src src/index.js",
+    "start": "NODE_ENV=production node --optimize_for_size --max_old_space_size=2147 --gc_interval=100 src/index.js",
+    "deploy": "git archive -v -o deploy.zip --format=zip HEAD",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,5 +14,8 @@
   "dependencies": {
     "apollo-server": "^2.0.7",
     "elasticsearch": "^15.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }
