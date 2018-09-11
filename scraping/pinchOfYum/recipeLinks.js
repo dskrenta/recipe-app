@@ -18,7 +18,7 @@ async function main() {
           });
         }
       }
-      else if (links[link].includes('how-to')) {
+      else if (links[link].includes('how-to') || links[link].includes('snacks') || links[link].includes('recipes')) {
         // dont add
       }
       else {
