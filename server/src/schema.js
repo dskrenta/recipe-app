@@ -16,7 +16,7 @@ const schema = gql`
     prepTime: Float
     cookTime: Float
     totalTime: Float
-    servings: Float
+    servings: String
     cusine: String
     course: String
     createdAt: String!
