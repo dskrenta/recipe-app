@@ -22,7 +22,7 @@ async function createIndicies() {
             properties: {
               title: {type: 'keyword'},
               description: {type: 'text'},
-              ingridients: {type: 'text'},
+              ingredients: {type: 'text'},
               directions: {type: 'text'},
               tags: {type: 'keyword'},
               image: {type: 'text', index: false},
