@@ -6,7 +6,7 @@ const schema = gql`
   type Recipe {
     title: String!
     description: String
-    ingridients: [String!]!
+    ingredients: [String!]!
     directions: [String!]!
     tags: [String]
     image: String

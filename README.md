@@ -12,7 +12,7 @@ Directory for all scraping resources, materials, and associated data
 {
   title: 'Parmesan Risotto',
   description: `Slowly stirring hot broth into creamy white rice soothes the soul--and the result comforts the body. This parmesan risotto recipe make take some time to prepare but the finished dish will be well worth the effort.`,
-  ingridients: [
+  ingredients: [
     '10 to 12 cups reduced-sodium or homemade chicken broth*',
     '2 tablespoons olive oil',
     '2 tablespoons plus 1 tsp. butter, divided',
@@ -65,7 +65,7 @@ Directory for all scraping resources, materials, and associated data
 type Recipe {
   title: String!
   description: String
-  ingridients: [String!]!
+  ingredients: [String!]!
   directions: [String!]!
   tags: [String]
   image: String
