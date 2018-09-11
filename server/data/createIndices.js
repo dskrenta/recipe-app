@@ -32,7 +32,7 @@ async function createIndicies() {
               prepTime: {type: 'float'},
               cookTime: {type: 'float'},
               totalTime: {type: 'float'},
-              servings: {type: 'float'},
+              servings: {type: 'text'},
               cusine: {type: 'keyword'},
               course: {type: 'keyword'},
               review: {type: 'float'},

@@ -37,7 +37,7 @@ Directory for all scraping resources, materials, and associated data
   ],
   image: 'https://imagesvc.timeincapp.com/v3/mm/image?url=https%3A%2F%2Fcdn-image.myrecipes.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2Fmedium_2x%2Fpublic%2Fimage%2Frecipes%2Fsu%2F09%2F02%2Fparmesan-risotto-su-1873423-x.jpg%3Fitok%3DA6i8zol2&w=800&q=85',
   totalTime: 50,
-  servings: 8,
+  servings: '8-10',
   nutrition: {
     calories: 307,
     caloriesFromFat: 27,
@@ -75,7 +75,7 @@ type Recipe {
   prepTime: Float
   cookTime: Float
   totalTime: Float
-  servings: Float
+  servings: String
   cusine: String
   course: String
   createdAt: String!
