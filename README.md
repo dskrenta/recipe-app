@@ -47,7 +47,7 @@ Directory for all scraping resources, materials, and associated data
     carbohydrates: 46,
     fiber: 4.3,
     sodium: 1008,
-    cholesterol: 14 
+    cholesterol: 14
   },
   url: 'https://www.myrecipes.com/recipe/parmesan-risotto',
   review: 4.9,
@@ -91,7 +91,7 @@ type Nutrition {
   totalFat: Float
   totalFatDailyValue: Float
   saturatedFat: Float
-  saturatedFateDailyValue: Float
+  saturatedFatDailyValue: Float
   cholesterol: Float
   cholesterolDailyValue: Float
   sodium: Float

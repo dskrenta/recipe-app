@@ -32,7 +32,7 @@ const schema = gql`
     totalFat: Float
     totalFatDailyValue: Float
     saturatedFat: Float
-    saturatedFateDailyValue: Float
+    saturatedFatDailyValue: Float
     cholesterol: Float
     cholesterolDailyValue: Float
     sodium: Float
@@ -69,7 +69,7 @@ const schema = gql`
   type Query {
     getRecipe(id: ID!): [Recipe]!
     searchRecipes(query: String!, pagination: Pagination): [Recipe]!
-    recommendedRecipes(pagination: Pagination): [Recipe]!  
+    recommendedRecipes(pagination: Pagination): [Recipe]!
   }
 `;
 
