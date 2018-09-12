@@ -146,8 +146,6 @@ https://pinchofyum.com/worlds-best-watermelon-smoothie
 https://pinchofyum.com/green-curry-scallops
 https://pinchofyum.com/korean-bbq-burrito
 https://pinchofyum.com/banh-mi-bowls
-https://pinchofyum.com/chocolate-snack-bars
-https://pinchofyum.com/lo-mein
 https://pinchofyum.com/detox-salad
 https://pinchofyum.com/chicken-tikka-masala
 https://pinchofyum.com/french-toast-casserole
@@ -814,4 +812,3 @@ https://pinchofyum.com/pumpkin-pecan-cheesecake-parfaits
 https://pinchofyum.com/tomato-ricotta-pasta-with-broccoli
 https://pinchofyum.com/scotchabrownies
 https://pinchofyum.com/zucchini-fritters-goat-cheese-sauce
-https://pinchofyum.com/morning-grains

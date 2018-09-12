@@ -22,15 +22,15 @@ rl.on('close', () => {
 
 async function main() {
   try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    const promises = lines.slice(0, 1).map(line => getRecipe(line, page));
+    const promises = lines.slice(801, 814).map(line => getRecipe(line));
     const results = await Promise.all(promises);
-    browser.close();
-    console.log(results);
+    //console.log(results);
 
     for (let recipe of results) {
-      fs.writeFile(`recipes/${crypto.createHash('md5').update(recipe.url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
+      console.log(recipe);
+      if (recipe !== undefined) {
+        fs.writeFile(`recipes/${crypto.createHash('md5').update(recipe.url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
+      }
     }
   }
   catch (error) {
@@ -38,7 +38,7 @@ async function main() {
   }
 }
 
-const getRecipe = async (url, page) => {
+const getRecipe = async (url) => {
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -100,8 +100,10 @@ const getRecipe = async (url, page) => {
     const nutritionID = $('.nutrifox-label').attr('data-recipe-id');
 
     if (nutritionID) {
-      recipe.nutrition = {};
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
       await page.goto(`https://nutrifox.com/embed/label/${nutritionID}`);
+      recipe.nutrition = {};
 
       const result = await page.evaluate(() => {
         const nutrition = {};
@@ -137,6 +139,7 @@ const getRecipe = async (url, page) => {
         return nutrition;
       });
 
+      browser.close();
       recipe.nutrition = result;
     }
 
