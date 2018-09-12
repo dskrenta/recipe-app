@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const readline = require('readline');
+const puppeteer = require('puppeteer');
 
 const rl = readline.createInterface({
   input: fs.createReadStream('recipeLinks.txt'),
@@ -21,8 +22,11 @@ rl.on('close', () => {
 
 async function main() {
   try {
-    const promises = lines.slice(0, 1).map(line => getRecipe(line));
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const promises = lines.slice(0, 1).map(line => getRecipe(line, page));
     const results = await Promise.all(promises);
+    browser.close();
     console.log(results);
   }
   catch (error) {
@@ -30,7 +34,7 @@ async function main() {
   }
 }
 
-const getRecipe = async (url) => {
+const getRecipe = async (url, page) => {
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -93,50 +97,43 @@ const getRecipe = async (url) => {
 
     if (nutritionID) {
       recipe.nutrition = {};
-      const newRes = await fetch(`https://nutrifox.com/embed/label/${nutritionID}`)
-      const newText = await newRes.text();
-      const new$ = cheerio.load(newText);
-      console.log(new$.html());
+      await page.goto(`https://nutrifox.com/embed/label/${nutritionID}`);
 
-      new$('.label-nutrient').each(((i, item) => {
-        console.log("NUTRIENT")
-        switch (i) {
-          case 0:
-            recipe.nutrition.totalFat = parseFloat(new$(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat(new$(item).children('.label-nutrient-percentage').text());
-            break;
-          case 1:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 2:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 3:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 4:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 5:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 6:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          case 7:
-            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-            break;
-          default:
-            break;
-        }
-      }))
+      const result = await page.evaluate(() => {
+        const nutrition = {};
+        const items = document.querySelectorAll('.label-nutrient');
+        const nutritionNames = [
+          'totalFat',
+          'cholestrol',
+          'sodium',
+          'carbohydrates',
+          'sugars',
+          'protein',
+          'vitaminA',
+          'vitaminC'
+        ]
+        const nutritionValues = [
+          'totalFatDailyValue',
+          'cholestrolDailyValue',
+          'sodiumDailyValue',
+          'carbohydratesDailyValue',
+          'sugarsDailyValue',
+          'proteinDailyValue',
+          'vitaminADailyValue',
+          'vitaminCDailyValue'
+        ]
+        
+        items.forEach((item, i) => {
+          nutrition[nutritionNames[i]] = parseFloat(item.querySelector('.label-nutrient-name i').innerHTML);
+          if (item.querySelector('.label-nutrient-percentage')) {
+            nutrition[nutritionValues[i]] = parseFloat(item.querySelector('.label-nutrient-percentage').innerHTML);
+          }
+        });
+        
+        return nutrition;
+      });
+
+      recipe.nutrition = result;
     }
 
     return recipe;
@@ -145,5 +142,3 @@ const getRecipe = async (url) => {
     console.error(e);
   }
 }
-
-// main();
