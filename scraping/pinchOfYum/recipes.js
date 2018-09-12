@@ -21,7 +21,7 @@ rl.on('close', () => {
 
 async function main() {
   try {
-    const promises = lines.slice(0, 5).map(line => getRecipe(line));
+    const promises = lines.slice(0, 1).map(line => getRecipe(line));
     const results = await Promise.all(promises);
     console.log(results);
   }
@@ -32,37 +32,68 @@ async function main() {
 
 const getRecipe = async (url) => {
   try {
-    const res = await fetch(url);
+    const res = await fetch('https://pinchofyum.com/raspberry-crumble-bars');
     const text = await res.text();
     const $ = cheerio.load(text);
     let recipe = {
       ingredients: [],
       directions: [],
       // nutrition: {}
+      url
     }
 
     recipe.title = $('.tasty-recipes-entry-header h2').text();
-    recipe.description = $('.tasty-recipes-description p').text();
     $('.tasty-recipes-ingredients li').each((i, item) => {recipe.ingredients[i] = $(item).text()});
     $('.tasty-recipes-instructions li').each((i, item) => {recipe.directions[i] = $(item).text()});
-    recipe.image = $('.tasty-recipes-image img').attr('src');
-    recipe.servings = $('.tasty-recipes-yield').text();
-    recipe.course = $('.tasty-recipes-category').text();
-    recipe.cuisine = $('.tasty-recipes-cuisine').text();
-    recipe.review = parseFloat($('.average').text());
+    
+    const description = $('.tasty-recipes-description p').text();
+    const image = $('.tasty-recipes-image img').attr('src');
+    const servings = $('.tasty-recipes-yield').text();
+    const course = $('.tasty-recipes-category').text();
+    const cuisine = $('.tasty-recipes-cuisine').text();
+    const review = parseFloat($('.average').text());
+    const prepHours = $('.tasty-recipes-prep-time').text().includes('hour');
+    let prepTime = parseFloat($('.tasty-recipes-prep-time').text());
+    const cookHours = $('.tasty-recipes-cook-time').text().includes('hour');
+    let cookTime = parseFloat($('.tasty-recipes-cook-time').text());
 
-    const prepTime = parseFloat($('.tasty-recipes-prep-time').text());
-    const cookTime = parseFloat($('.tasty-recipes-cook-time').text());
-    const totalTime = parseFloat($('.tasty-recipes-total-time').text());
-
+    if (description !== '') {
+      recipe.description = description;
+    }
+    if (image !== undefined && image !== '') {
+      recipe.image = image;
+    }
+    if (servings !== '') {
+      recipe.servings = servings;
+    }
+    if (course !== '') {
+      recipe.course = course;
+    }
+    if (cuisine !== '') {
+      recipe.cuisine = cuisine;
+    }
+    if (!isNaN(review)) {
+      recipe.review = review;
+    }
     if (!isNaN(prepTime)) {
+      if (prepHours) {
+        prepTime = prepTime * 60;
+      }
       recipe.prepTime = prepTime;
+      recipe.totalTime = prepTime;
     }
     if (!isNaN(cookTime)) {
+      if (cookHours) {
+        cookTime = cookTime * 60;
+      }
       recipe.cookTime = cookTime;
+      recipe.totalTime = recipe.totalTime + cookTime;
     }
-    if (!isNaN(totalTime)) {
-      recipe.totalTime = totalTime;
+
+    const nutritionID = $('.nutrifox-label').attr('data-recipe-id');
+
+    if (nutritionID) {
+      console.log(nutritionID);
     }
 
     /*
