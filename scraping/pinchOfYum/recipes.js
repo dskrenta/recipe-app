@@ -32,13 +32,12 @@ async function main() {
 
 const getRecipe = async (url) => {
   try {
-    const res = await fetch('https://pinchofyum.com/raspberry-crumble-bars');
+    const res = await fetch(url);
     const text = await res.text();
     const $ = cheerio.load(text);
     let recipe = {
       ingredients: [],
       directions: [],
-      // nutrition: {}
       url
     }
 
@@ -93,54 +92,52 @@ const getRecipe = async (url) => {
     const nutritionID = $('.nutrifox-label').attr('data-recipe-id');
 
     if (nutritionID) {
-      console.log(nutritionID);
+      recipe.nutrition = {};
+      const newRes = await fetch(`https://nutrifox.com/embed/label/${nutritionID}`)
+      const newText = await newRes.text();
+      const new$ = cheerio.load(newText);
+      console.log(new$.html());
+
+      new$('.label-nutrient').each(((i, item) => {
+        console.log("NUTRIENT")
+        switch (i) {
+          case 0:
+            recipe.nutrition.totalFat = parseFloat(new$(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat(new$(item).children('.label-nutrient-percentage').text());
+            break;
+          case 1:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 2:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 3:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 4:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 5:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 6:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          case 7:
+            recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
+            recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
+            break;
+          default:
+            break;
+        }
+      }))
     }
-
-    /*
-    console.log($('iframe').attr('src'));
-    // const newRes = await fetch();
-
-    console.log($('.label-nutrient i').text());
-
-    $('.label-nutrient').each(((i, item) => {
-      console.log("NUTRIENT")
-      switch (i) {
-        case 0:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 1:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 2:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 3:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 4:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 5:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 6:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        case 7:
-          recipe.nutrition.totalFat = parseFloat($(item).children('.label-nutrient-name i').text());
-          recipe.nutrition.totalFatDailyValue = parseFloat($(item).children('.label-nutrient-percentage').text());
-          break;
-        default:
-          break;
-      }
-    }))*/
 
     return recipe;
   }
