@@ -28,6 +28,10 @@ async function main() {
     const results = await Promise.all(promises);
     browser.close();
     console.log(results);
+
+    for (let recipe of results) {
+      fs.writeFile(`recipes/${crypto.createHash('md5').update(recipe.url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
+    }
   }
   catch (error) {
     console.error(error);
