@@ -1,9 +1,17 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
-const Recommended = () => (
+import SearchBar from '../Common/SearchBar';
+
+const Recommended = ({ navigation }) => (
   <SafeAreaView>
+    <TouchableHighlight
+      onPress={() => (navigation.navigate('Search'))}
+      underlayColor="transparent"
+    >
+      <SearchBar navigation={navigation} />
+    </TouchableHighlight>
     <Text>Recommended</Text>
   </SafeAreaView>
 )

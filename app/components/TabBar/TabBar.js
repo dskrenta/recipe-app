@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
 const tabs = [
   {
@@ -27,15 +28,20 @@ const TabBar = ({ navigation }) => {
       {tabs.map((tab, i) => (
         <TouchableHighlight 
           key={i} 
-          onPress={() => navigation.navigate(tab.name)}
+          onPress={() => (navigation.navigate(tab.name))}
           underlayColor="transparent"
           style={{width: '33%'}}
         >
           <View
             style={styles.tab}
           >
-            <Icon name={activeRoute === tab.name ? tab.activeIcon : tab.icon} size={30} color={activeRoute === tab.name ? '#2dc364' : '#888'} />
-            <Text style={{color: activeRoute === tab.name ? '#2dc364' : '#888'}}>{tab.name}</Text>
+            <Icon 
+              name={activeRoute === tab.name ? tab.activeIcon : tab.icon} 
+              color={activeRoute === tab.name ? '#2dc364' : '#aaa'}
+              size={30}
+              style={{marginBottom: 3}}
+            />
+            <Text style={{color: activeRoute === tab.name ? '#2dc364' : '#aaa'}}>{tab.name}</Text>
           </View>
         </TouchableHighlight>
       ))}
@@ -49,7 +55,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: 60
+    height: 60,
+    marginBottom: iPhoneStyle(20, 0, 0)
   },
   tab: {
     flex: 1,
