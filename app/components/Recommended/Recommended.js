@@ -1,19 +1,86 @@
 import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, TouchableHighlight, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
-import SearchBar from '../Common/SearchBar';
+import SearchWrap from '../Common/SearchWrap';
+
+const { width } = Dimensions.get('window');
 
 const Recommended = ({ navigation }) => (
   <SafeAreaView>
-    <TouchableHighlight
-      onPress={() => (navigation.navigate('Search'))}
-      underlayColor="transparent"
-    >
-      <SearchBar navigation={navigation} />
-    </TouchableHighlight>
-    <Text>Recommended</Text>
+    <SearchWrap navigation={navigation}>
+      <View style={styles.carouselContain}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          horizontal={true}
+        >
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+          <Text>Recommended</Text>
+        </ScrollView>
+      </View>
+    </SearchWrap>
   </SafeAreaView>
-)
+);
+
+const styles = StyleSheet.create({
+  carouselContain: {
+    width: '90%',
+    height: '100%',
+    backgroundColor: 'yellow'
+  },
+  scrollView: {
+    width
+  }
+})
 
 export default Recommended;

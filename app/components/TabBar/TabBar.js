@@ -37,11 +37,11 @@ const TabBar = ({ navigation }) => {
           >
             <Icon 
               name={activeRoute === tab.name ? tab.activeIcon : tab.icon} 
-              color={activeRoute === tab.name ? '#2dc364' : '#aaa'}
+              color={activeRoute === tab.name ? '#2c6' : '#aaa'}
               size={30}
               style={{marginBottom: 3}}
             />
-            <Text style={{color: activeRoute === tab.name ? '#2dc364' : '#aaa'}}>{tab.name}</Text>
+            <Text style={{color: activeRoute === tab.name ? '#2c6' : '#aaa'}}>{tab.name}</Text>
           </View>
         </TouchableHighlight>
       ))}
