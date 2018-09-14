@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   children: {
     position: 'absolute',
-    bottom: iPhoneStyle(10, 5, 5),
+    bottom: iPhoneStyle(0, 0, 0),
     top: 80,
     right: 0,
     left: 0,

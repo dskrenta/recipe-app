@@ -1,71 +1,21 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableHighlight, StyleSheet, Dimensions } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 import SearchWrap from '../Common/SearchWrap';
-
-const { width } = Dimensions.get('window');
+import RecipeCard from '../Common/RecipeCard';
 
 const Recommended = ({ navigation }) => (
   <SafeAreaView>
     <SearchWrap navigation={navigation}>
       <View style={styles.carouselContain}>
         <ScrollView
-          contentContainerStyle={styles.scrollView}
-          horizontal={true}
+          style={styles.scrollView}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          pagingEnabled
         >
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
-          <Text>Recommended</Text>
+          <RecipeCard />
         </ScrollView>
       </View>
     </SearchWrap>
@@ -74,12 +24,10 @@ const Recommended = ({ navigation }) => (
 
 const styles = StyleSheet.create({
   carouselContain: {
-    width: '90%',
-    height: '100%',
-    backgroundColor: 'yellow'
+    flex: 1
   },
   scrollView: {
-    width
+    flex: 1
   }
 })
 
