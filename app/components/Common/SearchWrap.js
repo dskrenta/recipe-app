@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  View, 
-  ScrollView, 
-  Text, 
-  TouchableHighlight, 
-  StyleSheet, 
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  StyleSheet,
   TextInput,
   Animated
 } from 'react-native';
@@ -55,12 +55,12 @@ class SearchWrap extends React.Component {
                 </TouchableHighlight>
               : <Icon name="search" color="#2c6" size={20} style={styles.search}/>
             }
-            <TextInput 
+            <TextInput
               ref={(ref) => {this.searchBar = ref}}
               placeholder="Search Recipes"
               style={styles.input}
               value={this.state.value}
-              onChangeText={(value) => {this.setState({ value })}} 
+              onChangeText={(value) => {this.setState({ value })}}
               onFocus={this.onFocus}
             />
             {this.state.value !== '' &&
@@ -73,11 +73,11 @@ class SearchWrap extends React.Component {
             }
           </View>
         </View>
-        <Animated.View 
+        <Animated.View
           style={[styles.searchResults,
             {
               opacity: this.state.fade,
-              zIndex: this.state.showSearch
+              zIndex: this.state.showSearch ? 1 : 0
             },
           ]}
         >
