@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     height: 60,
-    marginBottom: iPhoneStyle(20, 5, 5)
+    marginBottom: iPhoneStyle(20, 5, 5),
+    paddingHorizontal: 15
   },
   tab: {
     flex: 1,

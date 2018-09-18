@@ -49,7 +49,7 @@ const samples = [
       cholesterol: 14
     },
     url: 'https://www.myrecipes.com/recipe/parmesan-risotto',
-    review: 4.9,
+    rating: 4.9,
     chef: {
       name: 'Chef John',
       avatar: 'https://secureimages.allrecipes.com/userphotos/250x250/2267470.jpg',
@@ -99,7 +99,7 @@ const samples = [
       cholesterol: 14
     },
     url: 'https://www.myrecipes.com/recipe/parmesan-risotto',
-    review: 4.9,
+    rating: 4.9,
     chef: {
       name: 'Chef John',
       avatar: 'https://secureimages.allrecipes.com/userphotos/250x250/2267470.jpg',

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Entypo';
+
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
 const { width, height } = Dimensions.get('window');
@@ -13,24 +15,32 @@ const RecipeCard = ({ recipe }) => (
       <Text style={styles.title}>{recipe.title}</Text>
     </View>
     <View style={styles.colorRow}>
-      <View style={[styles.rowItem, {backgroundColor: '#66e599'}]}>
-        <Text style={styles.rowItemText}>EASY</Text>
+      <View style={[styles.colorItem, {backgroundColor: '#66e599'}]}>
+        <Text style={styles.colorItemText}>EASY</Text>
       </View>
-      <View style={[styles.rowItem, {backgroundColor: '#3bde7c'}]}>
-        <Text style={styles.rowItemText}>{recipe.cuisine.toUpperCase()}</Text>
+      <View style={[styles.colorItem, {backgroundColor: '#3bde7c'}]}>
+        <Text style={styles.colorItemText}>{recipe.cuisine.toUpperCase()}</Text>
       </View>
-      <View style={[styles.rowItem, {backgroundColor: '#2c6'}]}>
-        <Text style={styles.rowItemText}>{recipe.course.toUpperCase()}</Text>
+      <View style={[styles.colorItem, {backgroundColor: '#2c6'}]}>
+        <Text style={styles.colorItemText}>{recipe.course.toUpperCase()}</Text>
       </View>
     </View>
     <View style={styles.titleContain}>
       <Text numberOfLines={4}>{recipe.description}</Text>
     </View>
-    <View style={styles.titleContain}>
-      <Text numberOfLines={4}>{recipe.description}</Text>
-    </View>
-    <View style={styles.titleContain}>
-      <Text numberOfLines={4}>{recipe.description}</Text>
+    <View style={styles.bottomRow}>
+      <View style={styles.bottomItem}>
+        <Icon name="stopwatch" size={30} color="#666" />
+        <Text style={styles.statText}>{recipe.totalTime}<Text style={styles.statSpan}> min</Text></Text>
+      </View>
+      <View style={styles.bottomItem}>
+        <Icon name="price-ribbon" size={30} color="#666" />
+        <Text style={styles.statText}>{recipe.rating}<Text style={styles.statSpan}> /5</Text></Text>
+      </View>
+      <View style={styles.bottomItem}>
+        <Icon name="flash" size={30} color="#666" />
+        <Text style={styles.statText}>{recipe.nutrition.calories}<Text style={styles.statSpan}> cal</Text></Text>
+      </View>
     </View>
   </View>
 );
@@ -75,18 +85,43 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'space-between',
   },
-  rowItem: {
+  colorItem: {
     flex: 1,
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 15
+    paddingVertical: 12
   },
-  rowItemText: {
+  colorItemText: {
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center'
+  },
+  bottomRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
+  },
+  bottomItem: {
+    flex: 1,
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 20
+  },
+  statText: {
+    marginTop: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1a5'
+  },
+  statSpan: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    color: '#333'
   }
 });
 
