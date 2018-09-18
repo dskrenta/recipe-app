@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconIon from 'react-native-vector-icons/Ionicons';
+import IconFa from 'react-native-vector-icons/FontAwesome';
 
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
@@ -25,22 +27,22 @@ const RecipeCard = ({ recipe }) => (
         <Text style={styles.colorItemText}>{recipe.course.toUpperCase()}</Text>
       </View>
     </View>
-    <View style={styles.titleContain}>
-      <Text numberOfLines={4}>{recipe.description}</Text>
-    </View>
     <View style={styles.bottomRow}>
       <View style={styles.bottomItem}>
-        <Icon name="stopwatch" size={30} color="#666" />
+        <IconIon name="md-stopwatch" size={30} color="#666" />
         <Text style={styles.statText}>{recipe.totalTime}<Text style={styles.statSpan}> min</Text></Text>
       </View>
       <View style={styles.bottomItem}>
-        <Icon name="price-ribbon" size={30} color="#666" />
-        <Text style={styles.statText}>{recipe.rating}<Text style={styles.statSpan}> /5</Text></Text>
+        <IconIon name="md-ribbon" size={30} color="#666" />
+        <Text style={styles.statText}>{recipe.rating}<Text style={styles.statSpan}>/5</Text></Text>
       </View>
       <View style={styles.bottomItem}>
-        <Icon name="flash" size={30} color="#666" />
+        <IconMd name="fire" size={30} color="#666" />
         <Text style={styles.statText}>{recipe.nutrition.calories}<Text style={styles.statSpan}> cal</Text></Text>
       </View>
+    </View>
+    <View style={styles.titleContain}>
+      <Text numberOfLines={4}>{recipe.description}</Text>
     </View>
   </View>
 );
@@ -77,7 +79,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333'
+    color: '#333',
+    textAlign: 'center'
   },
   colorRow: {
     display: 'flex',
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 20
+    paddingTop: 25
   },
   statText: {
     marginTop: 5,
