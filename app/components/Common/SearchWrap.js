@@ -18,21 +18,23 @@ class SearchWrap extends React.Component {
     this.state = {
       value: '',
       showSearch: false,
+      backIcon: false,
       fade: new Animated.Value(0)
     }
   }
 
   onFocus = () => {
-    this.setState({ showSearch: true });
+    this.setState({ showSearch: true, backIcon: true });
     Animated.timing(this.state.fade, {
       toValue: 1,
       duration: 500
     }).start();
   }
 
-  endSearch = async () => {
+  endSearch = () => {
     this.searchBar.blur();
-    await Animated.timing(this.state.fade, {
+    this.setState({ backIcon: false });
+    Animated.timing(this.state.fade, {
       toValue: 0,
       duration: 500
     }).start(() => {
@@ -46,7 +48,7 @@ class SearchWrap extends React.Component {
       <View style={styles.contain}>
         <View style={styles.barContain}>
           <View style={styles.searchBar}>
-            {this.state.showSearch
+            {this.state.backIcon
               ? <TouchableHighlight
                   onPress={this.endSearch}
                   underlayColor="transparent"
@@ -131,15 +133,15 @@ const styles = StyleSheet.create({
   },
   searchResults: {
     position: 'absolute',
-    bottom: iPhoneStyle(10, 5, 5),
+    bottom: 0,
     top: 80,
     right: 0,
     left: 0,
-    backgroundColor: 'red'
+    backgroundColor: 'white'
   },
   children: {
     position: 'absolute',
-    bottom: iPhoneStyle(0, 0, 0),
+    bottom: 0,
     top: 80,
     right: 0,
     left: 0,
