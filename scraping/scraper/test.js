@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const Scraper = require('./index.js');
 
 const scraper = new Scraper({
@@ -23,6 +24,11 @@ scraper.addTarget({
       }
 
       const content = await page.content();
+
+      fs.writeFile('test.txt', content, (err) => {
+        if (err) throw err;
+        console.log('success');
+      });
 
       console.log(content);
     }
