@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
-import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMdc from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMd from 'react-native-vector-icons/MaterialIcons';
 import IconIon from 'react-native-vector-icons/Ionicons';
-import IconFa from 'react-native-vector-icons/FontAwesome';
+import IconEn from 'react-native-vector-icons/Entypo';
+import Star from 'react-native-star-view';
 
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
@@ -15,7 +17,22 @@ const RecipeCard = ({ recipe }) => (
     </View>
     <View style={styles.titleContain}>
       <Text style={styles.title}>{recipe.title}</Text>
+      <View style={styles.ratingRow}>
+        <Star score={recipe.rating} style={styles.ratingStars} />
+        <Text style={styles.ratingText}>{recipe.rating}</Text>
+      </View>
     </View>
+    {/*<View style={styles.colorRow}>
+      <View style={styles.colorItem}>
+        <Text style={styles.colorItemText}>EASY</Text>
+      </View>
+      <View style={[styles.colorItem, {borderRightWidth: 1, borderLeftWidth: 1}]}>
+        <Text style={styles.colorItemText}>{recipe.cuisine.toUpperCase()}</Text>
+      </View>
+      <View style={styles.colorItem}>
+        <Text style={styles.colorItemText}>{recipe.course.toUpperCase()}</Text>
+      </View>
+    </View>*/}
     <View style={styles.colorRow}>
       <View style={[styles.colorItem, {backgroundColor: '#66e599'}]}>
         <Text style={styles.colorItemText}>EASY</Text>
@@ -29,21 +46,35 @@ const RecipeCard = ({ recipe }) => (
     </View>
     <View style={styles.bottomRow}>
       <View style={styles.bottomItem}>
-        <IconIon name="md-stopwatch" size={30} color="#666" />
-        <Text style={styles.statText}>{recipe.totalTime}<Text style={styles.statSpan}> min</Text></Text>
+        <Text style={styles.statText}>{recipe.totalTime}</Text>
+        <Text style={styles.statSpan}>Minutes</Text>
       </View>
       <View style={styles.bottomItem}>
-        <IconIon name="md-ribbon" size={30} color="#666" />
-        <Text style={styles.statText}>{recipe.rating}<Text style={styles.statSpan}>/5</Text></Text>
+        <Text style={styles.statText}>{recipe.servings}</Text>
+        <Text style={styles.statSpan}>Servings</Text>
       </View>
       <View style={styles.bottomItem}>
-        <IconMd name="fire" size={30} color="#666" />
-        <Text style={styles.statText}>{recipe.nutrition.calories}<Text style={styles.statSpan}> cal</Text></Text>
+        <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+        <Text style={styles.statSpan}>Calories</Text>
       </View>
     </View>
-    <View style={styles.titleContain}>
-      <Text numberOfLines={4}>{recipe.description}</Text>
+    <View style={styles.descContain}>
+      <Text numberOfLines={3}>{recipe.description}</Text>
     </View>
+    {/*<View style={styles.bottomRow}>
+      <View style={styles.bottomItem}>
+        <IconIon name="md-stopwatch" size={30} color="#2c6" />
+        <Text style={styles.statSpan}>{recipe.totalTime}<Text style={styles.statSpan}> min</Text></Text>
+      </View>
+      <View style={styles.bottomItem}>
+        <IconIon name="md-ribbon" size={30} color="#2c6" />
+        <Text style={styles.statSpan}>{recipe.rating}<Text style={styles.statSpan}>/5</Text></Text>
+      </View>
+      <View style={styles.bottomItem}>
+        <IconMdc name="fire" size={30} color="#2c6" />
+        <Text style={styles.statSpan}>{recipe.nutrition.calories}<Text style={styles.statSpan}> cal</Text></Text>
+      </View>
+    </View>*/}
   </View>
 );
 
@@ -74,13 +105,29 @@ const styles = StyleSheet.create({
     flex: 1
   },
   titleContain: {
-    padding: 20
+    padding: 20,
+    paddingBottom: 5
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center'
+    color: '#333'
+  },
+  ratingRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  ratingStars: {
+    height: 20,
+    width: 100,
+  },
+  ratingText: {
+    fontSize: 16,
+    marginHorizontal: 6,
+    marginBottom: 3,
+    marginTop: 4
   },
   colorRow: {
     display: 'flex',
@@ -90,15 +137,18 @@ const styles = StyleSheet.create({
   },
   colorItem: {
     flex: 1,
-    flexGrow: 1,
+    //xflexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12
+    paddingVertical: 12,
+    borderWidth: 0,
+    borderColor: '#ccc',
+    marginVertical: 10
   },
   colorItemText: {
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: '900',
+    color: '#fff',
     textAlign: 'center'
   },
   bottomRow: {
@@ -113,18 +163,22 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 25
+    paddingTop: 5,
+    paddingBottom: 15
   },
   statText: {
-    marginTop: 5,
+    marginBottom: 5,
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1a5'
   },
   statSpan: {
-    fontSize: 16,
-    fontWeight: 'normal',
-    color: '#333'
+    color: '#666'
+  },
+  descContain: {
+    padding: 20,
+    paddingTop: 0,
+    paddingBottom: 20
   }
 });
 
