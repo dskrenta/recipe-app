@@ -17,7 +17,7 @@ const RecipeCard = ({ recipe }) => (
       <View style={styles.imageContain}>
         <Image source={{uri: recipe.image}} style={styles.image} />
         <View style={styles.saveContain}>
-          <IconFa name="bookmark-o" size={30} color="#fff" />
+          <IconFa name="bookmark-o" size={30} color="#fff" style={{elevation: 5}} />
         </View>
         <View style={styles.ratingContain}>
           <View style={styles.ratingRow}>
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 20,
+    elevation: 5
   },
   titleContain: {
     paddingHorizontal: 20,
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2c6'
-  } 
+  }
 });
 
 export default RecipeCard;

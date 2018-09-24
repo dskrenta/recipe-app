@@ -48,7 +48,6 @@ public class MainApplication extends Application implements ReactApplication {
         new MainReactPackage(),
             new VectorIconsPackage(),
             new RNFirebasePackage(),
-        new RNFirebasePackage(),
         // add/remove these packages as appropriate
         new RNFirebaseAdMobPackage(),
         new RNFirebaseAnalyticsPackage(),

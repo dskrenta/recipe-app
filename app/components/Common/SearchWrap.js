@@ -64,6 +64,7 @@ class SearchWrap extends React.Component {
               value={this.state.value}
               onChangeText={(value) => {this.setState({ value })}}
               onFocus={this.onFocus}
+              underlineColorAndroid="transparent"
             />
             {this.state.value !== '' &&
               <TouchableHighlight

@@ -26,8 +26,8 @@ const TabBar = ({ navigation }) => {
   return (
     <View style={styles.contain}>
       {tabs.map((tab, i) => (
-        <TouchableHighlight 
-          key={i} 
+        <TouchableHighlight
+          key={i}
           onPress={() => (navigation.navigate(tab.name))}
           underlayColor="transparent"
           style={{width: '33%'}}
@@ -35,8 +35,8 @@ const TabBar = ({ navigation }) => {
           <View
             style={styles.tab}
           >
-            <Icon 
-              name={activeRoute === tab.name ? tab.activeIcon : tab.icon} 
+            <Icon
+              name={activeRoute === tab.name ? tab.activeIcon : tab.icon}
               color={activeRoute === tab.name ? '#2c6' : '#aaa'}
               size={30}
               style={{marginBottom: 3}}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     height: 60,
     marginBottom: iPhoneStyle(20, 5, 5),
-    paddingHorizontal: 15
+    paddingHorizontal: 0
   },
   tab: {
     flex: 1,

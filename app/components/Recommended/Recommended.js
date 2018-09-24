@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 import SearchWrap from '../Common/SearchWrap';
@@ -119,7 +119,12 @@ const Recommended = ({ navigation }) => (
           pagingEnabled
         >
           {samples.map((recipe, i) => (
-            <RecipeCard key={i} recipe={recipe} />
+            <TouchableHighlight
+              onPress={() => {navigation.navigate('Recipe', { recipe })}}
+              underlayColor="transparent"
+            >
+              <RecipeCard key={i} recipe={recipe} />
+            </TouchableHighlight>
           ))}
         </ScrollView>
       </View>
