@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
-import IconMdc from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconMd from 'react-native-vector-icons/MaterialIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
-import IconIon from 'react-native-vector-icons/Ionicons';
-import IconEn from 'react-native-vector-icons/Entypo';
-import Star from 'react-native-star-view';
 
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
@@ -17,7 +13,7 @@ const RecipeCard = ({ recipe }) => (
       <View style={styles.imageContain}>
         <Image source={{uri: recipe.image}} style={styles.image} />
         <View style={styles.saveContain}>
-          <IconFa name="bookmark-o" size={30} color="#fff" style={{elevation: 5}} />
+          <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
         </View>
         <View style={styles.ratingContain}>
           <View style={styles.ratingRow}>
@@ -144,8 +140,21 @@ const styles = StyleSheet.create({
   },
   saveContain: {
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: 25,
+    right: 20
+  },
+  saveIcon: {
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    textShadowOffset: {
+      width: 0,
+      height: 1
+    },
     elevation: 5
   },
   titleContain: {

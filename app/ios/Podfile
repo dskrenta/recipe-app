@@ -26,6 +26,6 @@ target 'RecipeApp' do
   pod 'Fabric', '~> 1.7.5'
   pod 'Crashlytics', '~> 3.10.4'
 
-  # pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+# pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 end

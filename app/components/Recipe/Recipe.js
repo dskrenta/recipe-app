@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
@@ -14,7 +14,7 @@ const Recipe = ({ navigation }) => {
           underlayColor="transparent"
           style={styles.touchable}
         >
-          <Icon5 name="arrow-left" size={25} />
+          <Icon5 name="arrow-left" size={25} color="#666" />
         </TouchableHighlight>
         <Text style={styles.headerTitle}>Recipe Details</Text>
         <TouchableHighlight
@@ -22,7 +22,7 @@ const Recipe = ({ navigation }) => {
           underlayColor="transparent"
           style={styles.touchable}
         >
-          <Icon name="bookmark-o" size={25} />
+          <Icon name="bookmark-o" size={25} color="#666" />
         </TouchableHighlight>
       </View>
       <ScrollView style={styles.contain}>
@@ -66,7 +66,7 @@ const Recipe = ({ navigation }) => {
           }
           {recipe.ingredients &&
             <View style={styles.descContain}>
-              <Text style={styles.sectionTitle}>Ingredients</Text>
+              <Text style={styles.sectionTitlePad}>Ingredients</Text>
               {recipe.ingredients.map((item, i) => (
                 <View key={i} style={styles.listItem}>
                   <View style={styles.bullet}></View>
@@ -77,7 +77,7 @@ const Recipe = ({ navigation }) => {
           }
           {recipe.directions &&
             <View style={styles.descContain}>
-              <Text style={styles.sectionTitle}>Directions</Text>
+              <Text style={styles.sectionTitlePad}>Directions</Text>
               {recipe.directions.map((item, i) => (
                 <View key={i} style={styles.listItem}>
                   <View style={styles.step}>
@@ -94,6 +94,8 @@ const Recipe = ({ navigation }) => {
     </SafeAreaView>
   )
 }
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   header: {
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 200
+    height: height * 0.4,
   },
   body: {
     paddingVertical: 20,
@@ -186,6 +188,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5
   },
+  sectionTitlePad: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10
+  },
   listItem: {
     display: 'flex',
     flexDirection: 'row',
@@ -200,22 +207,23 @@ const styles = StyleSheet.create({
     flex: 1
   },
   bullet: {
-    height: 5,
-    width: 5,
-    borderRadius: 2.5,
-    margin: 5,
-    marginRight: 10,
+    height: 6,
+    width: 6,
+    borderRadius: 3,
+    marginTop: 5,
+    marginLeft: 8,
+    marginRight: 16,
     backgroundColor: '#2c6'
   },
   step: {
-    height: 15,
-    width: 15,
+    height: 20,
+    width: 20,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
-    marginRight: 7.5,
-    borderRadius: 7.5,
+    marginRight: 10,
+    borderRadius: 10,
     backgroundColor: '#2c6'
   },
   stepNum: {
