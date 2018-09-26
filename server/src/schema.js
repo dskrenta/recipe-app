@@ -21,7 +21,8 @@ const schema = gql`
     course: String
     createdAt: String!
     chef: Chef
-    review: Float
+    rating: Float
+    provider: Provider!
   }
 
   type Nutrition {
@@ -59,6 +60,12 @@ const schema = gql`
     name: String
     avatar: String
     url: String
+  }
+
+  type Provider {
+    url: String
+    name: String
+    image: String
   }
 
   type Pagination {

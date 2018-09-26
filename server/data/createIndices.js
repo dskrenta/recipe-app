@@ -37,6 +37,7 @@ async function createIndicies() {
               course: {type: 'keyword'},
               review: {type: 'float'},
               chef: {type: 'object'},
+              provider: {type: 'object'},
               createdAt: {type: 'date'}
             }
           }
