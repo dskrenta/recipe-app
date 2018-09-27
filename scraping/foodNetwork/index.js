@@ -142,6 +142,7 @@ for (let url of topPages) {
 }
 */
 
+/*
 const rl = readline.createInterface({
   input: fs.createReadStream('foodNetworkRecipePages.txt'),
   crlfDelay: Infinity
@@ -154,6 +155,7 @@ rl.on('line', (url) => {
     func: grabRecipeUrls
   });
 });
+*/
 
 /*
 scraper.addTarget({
@@ -161,3 +163,33 @@ scraper.addTarget({
   func: grabRecipeUrls
 });
 */
+
+async function grabRecipe({ url, browser }) {
+  try {
+    const page = await browser.newPage();
+    const status = await page.goto(url);
+
+    if (!status.ok) {
+      console.error(`Cannot open ${url}`);
+      throw new Error();
+    }
+
+    const data = await page.evaluate(() => {
+      const title = document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
+      const rating = document.querySelector('span.gig-rating-stars ').getAttribute('title').match(/^\d/)[0];
+      const totalTime = document.querySelector('dd.o-RecipeInfo__a-Description--Total').textContent;
+      const subValues = Array.from(document.querySelectorAll('dd.o-RecipeInfo__a-Description')).map(node => node.textContent);
+      const image = document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src');
+      const tags = Array.from(document.querySelectorAll('a.o-Capsule__a-Tag a-Tag')).map(node => node.textContent);
+
+      return {
+
+      };
+    });
+
+    console.log(data);
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
