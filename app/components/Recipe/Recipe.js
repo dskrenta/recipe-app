@@ -81,7 +81,7 @@ const Recipe = ({ navigation }) => {
               {recipe.directions.map((item, i) => (
                 <View key={i} style={styles.listItem}>
                   <View style={styles.step}>
-                    <Text style={styles.stepNum}>{i}</Text>
+                    <Text style={styles.stepNum}>{i + 1}</Text>
                   </View>
                   <Text style={styles.listItemText}>{item}</Text>
                 </View>
