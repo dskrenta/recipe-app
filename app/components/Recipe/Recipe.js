@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensio
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
+import IconMd from 'react-native-vector-icons/MaterialIcons';
 
 const Recipe = ({ navigation }) => {
   const recipe = navigation.getParam('recipe', {});
@@ -27,69 +28,79 @@ const Recipe = ({ navigation }) => {
       </View>
       <ScrollView style={styles.contain}>
         <View style={styles.innerContain}>
-        {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
-        <View style={styles.body}>
-          {recipe.title && <Text style={styles.title}>{recipe.title}</Text>}
-          <View style={styles.titleSubrow}>
-            {recipe.course &&
-              <View style={styles.courseTag}>
-                <Text style={styles.course}>{recipe.course}</Text>
-              </View>
-            }
-            {recipe.cuisine && <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>}
-          </View>
-          <View style={styles.bottomRow}>
-            {recipe.totalTime &&
-              <View style={styles.bottomItem}>
-                <Text style={styles.statText}>{recipe.totalTime}</Text>
-                <Text style={styles.statSpan}>Minutes</Text>
-              </View>
-            }
-            {recipe.servings &&
-              <View style={styles.bottomItem}>
-                <Text style={styles.statText}>{recipe.servings}</Text>
-                <Text style={styles.statSpan}>Servings</Text>
-              </View>
-            }
-            {recipe.nutrition && recipe.nutrition.calories &&
-              <View style={styles.bottomItem}>
-                <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-                <Text style={styles.statSpan}>Calories</Text>
-              </View>
-            }
-          </View>
-          {recipe.description &&
-            <View style={styles.descContain}>
-              <Text style={styles.sectionTitle}>Description</Text>
-              <Text>{recipe.description}</Text>
-            </View>
-          }
-          {recipe.ingredients &&
-            <View style={styles.descContain}>
-              <Text style={styles.sectionTitlePad}>Ingredients</Text>
-              {recipe.ingredients.map((item, i) => (
-                <View key={i} style={styles.listItem}>
-                  <View style={styles.bullet}></View>
-                  <Text style={styles.listItemText}>{item}</Text>
+          <View style={styles.imageContain}>
+            {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
+            {recipe.rating && recipe.image &&
+              <View style={styles.ratingContain}>
+                <View style={styles.ratingRow}>
+                  <IconMd name="star" size={25} color="orange" />
+                  <Text style={styles.ratingText}>{recipe.rating}</Text>
                 </View>
-              ))}
+              </View>
+            }
+          </View>
+          <View style={styles.body}>
+            {recipe.title && <Text style={styles.title}>{recipe.title}</Text>}
+            <View style={styles.titleSubrow}>
+              {recipe.course &&
+                <View style={styles.courseTag}>
+                  <Text style={styles.course}>{recipe.course}</Text>
+                </View>
+              }
+              {recipe.cuisine && <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>}
             </View>
-          }
-          {recipe.directions &&
-            <View style={styles.descContain}>
-              <Text style={styles.sectionTitlePad}>Directions</Text>
-              {recipe.directions.map((item, i) => (
-                <View key={i} style={styles.listItem}>
-                  <View style={styles.step}>
-                    <Text style={styles.stepNum}>{i + 1}</Text>
+            <View style={styles.bottomRow}>
+              {recipe.totalTime &&
+                <View style={styles.bottomItem}>
+                  <Text style={styles.statText}>{recipe.totalTime}</Text>
+                  <Text style={styles.statSpan}>Minutes</Text>
+                </View>
+              }
+              {recipe.servings &&
+                <View style={styles.bottomItem}>
+                  <Text style={styles.statText}>{recipe.servings}</Text>
+                  <Text style={styles.statSpan}>Servings</Text>
+                </View>
+              }
+              {recipe.nutrition && recipe.nutrition.calories &&
+                <View style={styles.bottomItem}>
+                  <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                  <Text style={styles.statSpan}>Calories</Text>
+                </View>
+              }
+            </View>
+            {recipe.description &&
+              <View style={styles.descContain}>
+                <Text style={styles.sectionTitle}>Description</Text>
+                <Text style={styles.desc}>{recipe.description}</Text>
+              </View>
+            }
+            {recipe.ingredients &&
+              <View style={styles.descContain}>
+                <Text style={styles.sectionTitlePad}>Ingredients</Text>
+                {recipe.ingredients.map((item, i) => (
+                  <View key={i} style={styles.listItem}>
+                    <View style={styles.bullet}></View>
+                    <Text style={styles.listItemText}>{item}</Text>
                   </View>
-                  <Text style={styles.listItemText}>{item}</Text>
-                </View>
-              ))}
-            </View>
-          }
+                ))}
+              </View>
+            }
+            {recipe.directions &&
+              <View style={styles.descContain}>
+                <Text style={styles.sectionTitlePad}>Directions</Text>
+                {recipe.directions.map((item, i) => (
+                  <View key={i} style={styles.listItem}>
+                    <View style={styles.step}>
+                      <Text style={styles.stepNum}>{i + 1}</Text>
+                    </View>
+                    <Text style={styles.listItemText}>{item}</Text>
+                  </View>
+                ))}
+              </View>
+            }
+          </View>
         </View>
-      </View>
       </ScrollView>
     </SafeAreaView>
   )
@@ -117,6 +128,10 @@ const styles = StyleSheet.create({
   innerContain: {
     height: '100%',
     paddingBottom: 50
+  },
+  imageContain: {
+    flex: 1,
+    position: 'relative'
   },
   image: {
     width: '100%',
@@ -183,6 +198,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 0
   },
+  desc: {
+    fontSize: 15
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -202,7 +220,7 @@ const styles = StyleSheet.create({
   listItemText: {
     margin: 0,
     padding: 0,
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 16,
     flex: 1
   },
@@ -230,6 +248,36 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: '900'
+  },
+  ratingContain: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    height: 40,
+    width: 80,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ratingRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flex: 0
+  },
+  ratingText: {
+    fontSize: 18,
+    color: '#666',
+    fontWeight: 'bold',
+    marginHorizontal: 5
   }
 })
 

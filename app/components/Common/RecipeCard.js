@@ -68,7 +68,7 @@ const RecipeCard = ({ recipe }) => (
       </View>
       <View style={styles.descContain}>
         <Text style={styles.descTitle}>Description</Text>
-        <Text numberOfLines={3}>{recipe.description}</Text>
+        <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
       </View>
       {/*<View style={styles.row}>
         <IconIon name="md-stopwatch" size={20} color="#333" style={{marginRight: 5}} />
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   statSpan: {
     color: '#888',
-    fontSize: 14
+    fontSize: 15
   },
   descContain: {
     padding: 20,
@@ -297,6 +297,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5
+  },
+  descText: {
+    fontSize: 15
   },
   row: {
     display: 'flex',
