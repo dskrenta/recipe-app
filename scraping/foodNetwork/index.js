@@ -181,31 +181,8 @@ async function grabRecipe({ url, browser }) {
       // const subValues = Array.from(document.querySelectorAll('dd.o-RecipeInfo__a-Description')).map(node => node.textContent);
       // const image = document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src');
       const tags = Array.from(document.querySelectorAll('a.o-Capsule__a-Tag')).map(node => node.textContent);
-
-      /*
-      const ingredients = Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => {
-        if (node.nodeName === 'H6') {
-          return `#${node.textContent}`;
-        }
-        if (node.nodeName === 'UL') {
-          // return node.textContent;
-          return Array.from(node.children).map(node => node.textContent);
-        }
-      });
-      */
-
       const ingredients = [];
-      const ingredElements = document.querySelector('div.o-Ingredients__m-Body').children;
-      for (let i = 0; i < ingredElements.length; i++) {
-        if (ingredElements[i].nodeName === 'H6') {
-          ingredients.push(`#${ingredElements[i].textContent}`);
-        }
-        else if (ingredElements[i].nodeName === 'UL') {
-          for (let j = 0; j < ingredElements[i].children.length; j++) {
-            ingredients.push(ingredElements[i].children[j].textContent);
-          }
-        }
-      }
+      Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => node.tagName === 'UL' ? Array.from(node.children).map(node => node.textContent.replace(/\s+|\n/g, ' ').trim()) : `#${node.textContent.replace(/\s+|\n/g, ' ').trim()}`).forEach(ingredient => (typeof ingredient === 'string') ? ingredients.push(ingredient) : ingredients = [...results, ...(ingredient.map(ingredient => ingredient.replace(/#/g, '')))]);
 
       return {
         title,
