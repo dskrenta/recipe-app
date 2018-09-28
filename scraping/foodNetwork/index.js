@@ -23,7 +23,7 @@ function appendFilePromise(file, data) {
   });
 }
 
-const topPages = [ 
+const topPages = [
   'http://www.foodnetwork.com/recipes/recipes-a-z/123',
   'http://www.foodnetwork.com/recipes/recipes-a-z/a',
   'http://www.foodnetwork.com/recipes/recipes-a-z/b',
@@ -48,7 +48,7 @@ const topPages = [
   'http://www.foodnetwork.com/recipes/recipes-a-z/u',
   'http://www.foodnetwork.com/recipes/recipes-a-z/v',
   'http://www.foodnetwork.com/recipes/recipes-a-z/w',
-  'http://www.foodnetwork.com/recipes/recipes-a-z/xyz' 
+  'http://www.foodnetwork.com/recipes/recipes-a-z/xyz'
 ];
 
 // const urlsToVist = []
@@ -178,12 +178,42 @@ async function grabRecipe({ url, browser }) {
       const title = document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
       const rating = document.querySelector('span.gig-rating-stars ').getAttribute('title').match(/^\d/)[0];
       const totalTime = document.querySelector('dd.o-RecipeInfo__a-Description--Total').textContent;
-      const subValues = Array.from(document.querySelectorAll('dd.o-RecipeInfo__a-Description')).map(node => node.textContent);
-      const image = document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src');
-      const tags = Array.from(document.querySelectorAll('a.o-Capsule__a-Tag a-Tag')).map(node => node.textContent);
+      // const subValues = Array.from(document.querySelectorAll('dd.o-RecipeInfo__a-Description')).map(node => node.textContent);
+      // const image = document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src');
+      const tags = Array.from(document.querySelectorAll('a.o-Capsule__a-Tag')).map(node => node.textContent);
+
+      /*
+      const ingredients = Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => {
+        if (node.nodeName === 'H6') {
+          return `#${node.textContent}`;
+        }
+        if (node.nodeName === 'UL') {
+          // return node.textContent;
+          return Array.from(node.children).map(node => node.textContent);
+        }
+      });
+      */
+
+      const ingredients = [];
+      const ingredElements = document.querySelector('div.o-Ingredients__m-Body').children;
+      for (let i = 0; i < ingredElements.length; i++) {
+        if (ingredElements[i].nodeName === 'H6') {
+          ingredients.push(`#${ingredElements[i].textContent}`);
+        }
+        else if (ingredElements[i].nodeName === 'UL') {
+          for (let j = 0; j < ingredElements[i].children.length; j++) {
+            ingredients.push(ingredElements[i].children[j].textContent);
+          }
+        }
+      }
 
       return {
-
+        title,
+        rating,
+        totalTime,
+        // image,
+        tags,
+        ingredients
       };
     });
 
@@ -193,3 +223,8 @@ async function grabRecipe({ url, browser }) {
     console.error(error);
   }
 }
+
+scraper.addTarget({
+  url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/bbq-duck-on-corn-cakes-recipe-2103370',
+  func: grabRecipe
+});
