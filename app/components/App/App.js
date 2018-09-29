@@ -1,18 +1,19 @@
 import React from 'react';
 import { createBottomTabNavigator, SafeAreaView } from 'react-navigation';
 
-import Recommended from '../Recommended/Recommended';
+import Recipes from '../Recipes/Recipes';
 import Random from '../Random/Random';
 import Saved from '../Saved/Saved';
 import Recipe from '../Recipe/Recipe';
 import TabBar from '../TabBar/TabBar';
+import ShoppingList from '../ShoppingList/ShoppingList';
 
 console.disableYellowBox = true;
 
 const Tabs = createBottomTabNavigator(
   {
-    Recommended: {
-      screen: Recommended
+    Recipes: {
+      screen: Recipes
     },
     Random: {
       screen: Random
@@ -22,10 +23,13 @@ const Tabs = createBottomTabNavigator(
     },
     Recipe: {
       screen: Recipe
+    },
+    ShoppingList: {
+      screen: ShoppingList
     }
   },
   {
-    initialRouteName: 'Recommended',
+    initialRouteName: 'ShoppingList',
     swipeEnabled: false,
     animationEnabled: false,
     tabBarComponent: TabBar
