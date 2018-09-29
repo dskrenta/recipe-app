@@ -216,9 +216,15 @@ async function grabRecipe({ url, browser }) {
     const data = await page.evaluate(() => {
       const title = document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
       const rating = parseInt(document.querySelector('span.gig-rating-stars').getAttribute('title').match(/^\d+/g)[0]);
-      const level = document.querySelector('span.o-RecipeInfo__a-Description').textContent;
+      const level = document.querySelector('span.o-RecipeInfo__a-Description').textContent.toLowerCase();
       const servings = parseInt(document.querySelector('ul.o-RecipeInfo__m-Yield > li > span.o-RecipeInfo__a-Description').textContent.match(/\d+/g)[0]);
       const tags = Array.from(document.querySelectorAll('a.o-Capsule__a-Tag.a-Tag')).map(node => node.textContent);
+
+      const imageSelector = document.querySelector('img.m-MediaBlock__a-Image.a-Image');
+      let image;
+      if (imageSelector.length > 0) {
+        image = `http:${imageSelector.getAttribute('src')}`;
+      }
 
       const times = document.querySelector('ul.o-RecipeInfo__m-Level').children[1].children[1].textContent.match(/\d+/g).map(elem => parseInt(elem));
       let totalTime;
@@ -235,13 +241,19 @@ async function grabRecipe({ url, browser }) {
 
       return {
         title,
+        image,
         rating,
         level,
         servings,
         totalTime,
         directions,
         ingredients,
-        tags
+        tags,
+        provider: {
+          siteUrl: 'https://www.foodnetwork.com/',
+          recipeUrl: window.location.href,
+          name: 'Food Network'
+        }
       };
     });
 

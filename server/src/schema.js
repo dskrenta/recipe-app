@@ -23,6 +23,13 @@ const schema = gql`
     chef: Chef
     rating: Float
     provider: Provider!
+    level: LevelType!
+  }
+
+  enum LevelType {
+    easy
+    intermediate
+    advanced
   }
 
   type Nutrition {
@@ -63,7 +70,8 @@ const schema = gql`
   }
 
   type Provider {
-    url: String
+    recipeUrl: String
+    siteUrl: String
     name: String
     image: String
   }
