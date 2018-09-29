@@ -29,7 +29,7 @@ const Tabs = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'ShoppingList',
+    initialRouteName: 'Recipes',
     swipeEnabled: false,
     animationEnabled: false,
     tabBarComponent: TabBar

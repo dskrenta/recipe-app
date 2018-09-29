@@ -3,107 +3,152 @@ import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensio
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
-import IconMd from 'react-native-vector-icons/MaterialIcons';
+import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Recipe = ({ navigation }) => {
-  const recipe = navigation.getParam('recipe', {});
-  return (
-    <SafeAreaView>
-      <View style={styles.header}>
-        <TouchableHighlight
-          onPress={() => {navigation.goBack()}}
-          underlayColor="transparent"
-          style={styles.touchable}
-        >
-          <Icon5 name="arrow-left" size={25} color="#666" />
-        </TouchableHighlight>
-        <Text style={styles.headerTitle}>Recipe Details</Text>
-        <TouchableHighlight
-          onPress={() => {navigation.goBack()}}
-          underlayColor="transparent"
-          style={styles.touchable}
-        >
-          <Icon name="bookmark-o" size={25} color="#666" />
-        </TouchableHighlight>
-      </View>
-      <ScrollView style={styles.contain}>
-        <View style={styles.innerContain}>
-          <View style={styles.imageContain}>
-            {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
-            {recipe.rating && recipe.image &&
-              <View style={styles.ratingContain}>
-                <View style={styles.ratingRow}>
-                  <IconMd name="star" size={25} color="orange" />
-                  <Text style={styles.ratingText}>{recipe.rating}</Text>
-                </View>
-              </View>
-            }
-          </View>
-          <View style={styles.body}>
-            {recipe.title && <Text style={styles.title}>{recipe.title}</Text>}
-            <View style={styles.titleSubrow}>
-              {recipe.course &&
-                <View style={styles.courseTag}>
-                  <Text style={styles.course}>{recipe.course}</Text>
-                </View>
-              }
-              {recipe.cuisine && <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>}
-            </View>
-            <View style={styles.bottomRow}>
-              {recipe.totalTime &&
-                <View style={styles.bottomItem}>
-                  <Text style={styles.statText}>{recipe.totalTime}</Text>
-                  <Text style={styles.statSpan}>Minutes</Text>
-                </View>
-              }
-              {recipe.servings &&
-                <View style={styles.bottomItem}>
-                  <Text style={styles.statText}>{recipe.servings}</Text>
-                  <Text style={styles.statSpan}>Servings</Text>
-                </View>
-              }
-              {recipe.nutrition && recipe.nutrition.calories &&
-                <View style={styles.bottomItem}>
-                  <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-                  <Text style={styles.statSpan}>Calories</Text>
-                </View>
-              }
-            </View>
-            {recipe.description &&
-              <View style={styles.descContain}>
-                <Text style={styles.sectionTitle}>Description</Text>
-                <Text style={styles.desc}>{recipe.description}</Text>
-              </View>
-            }
-            {recipe.ingredients &&
-              <View style={styles.descContain}>
-                <Text style={styles.sectionTitlePad}>Ingredients</Text>
-                {recipe.ingredients.map((item, i) => (
-                  <View key={i} style={styles.listItem}>
-                    <View style={styles.bullet}></View>
-                    <Text style={styles.listItemText}>{item}</Text>
-                  </View>
-                ))}
-              </View>
-            }
-            {recipe.directions &&
-              <View style={styles.descContain}>
-                <Text style={styles.sectionTitlePad}>Directions</Text>
-                {recipe.directions.map((item, i) => (
-                  <View key={i} style={styles.listItem}>
-                    <View style={styles.step}>
-                      <Text style={styles.stepNum}>{i + 1}</Text>
-                    </View>
-                    <Text style={styles.listItemText}>{item}</Text>
-                  </View>
-                ))}
-              </View>
-            }
-          </View>
+class Recipe extends React.Component {
+  constructor(props) {
+    super(props);
+    const recipe = this.props.navigation.getParam('recipe', {});
+
+    if (recipe.ingredients) {
+      this.state = {
+        checks: Array(recipe.ingredients.length).fill(0)
+      }
+    }
+  }
+
+  toggleCheck = (i) => {
+    const newChecks = this.state.checks;
+    newChecks[i] = !newChecks[i];
+    this.setState({ checks: newChecks });
+  }
+
+  render() {
+    const { navigation } = this.props;
+    const recipe = navigation.getParam('recipe', {});
+    return (
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableHighlight
+            onPress={() => {navigation.goBack()}}
+            underlayColor="transparent"
+            style={styles.touchable}
+          >
+            <Icon5 name="arrow-left" size={25} color="#666" />
+          </TouchableHighlight>
+          <Text style={styles.headerTitle}>Recipe Details</Text>
+          <TouchableHighlight
+            onPress={() => {navigation.goBack()}}
+            underlayColor="transparent"
+            style={styles.touchable}
+          >
+            <Icon name="bookmark-o" size={25} color="#666" />
+          </TouchableHighlight>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  )
+        <ScrollView 
+          style={styles.contain}
+        >
+          <View style={styles.innerContain}>
+            <View style={styles.imageContain}>
+              {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
+              {recipe.rating && recipe.image &&
+                <View style={styles.ratingContain}>
+                  <View style={styles.ratingRow}>
+                    <IconMd name="star" size={25} color="orange" />
+                    <Text style={styles.ratingText}>{recipe.rating}</Text>
+                  </View>
+                </View>
+              }
+            </View>
+            <View style={styles.body}>
+              {recipe.title && <Text style={styles.title}>{recipe.title}</Text>}
+              <View style={styles.titleSubrow}>
+                {recipe.course &&
+                  <View style={styles.courseTag}>
+                    <Text style={styles.course}>{recipe.course}</Text>
+                  </View>
+                }
+                {recipe.cuisine && <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>}
+              </View>
+              <View style={styles.bottomRow}>
+                {recipe.totalTime &&
+                  <View style={styles.bottomItem}>
+                    <Text style={styles.statText}>{recipe.totalTime}</Text>
+                    <Text style={styles.statSpan}>Minutes</Text>
+                  </View>
+                }
+                {recipe.servings &&
+                  <View style={styles.bottomItem}>
+                    <Text style={styles.statText}>{recipe.servings}</Text>
+                    <Text style={styles.statSpan}>Servings</Text>
+                  </View>
+                }
+                {recipe.nutrition && recipe.nutrition.calories &&
+                  <View style={styles.bottomItem}>
+                    <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                    <Text style={styles.statSpan}>Calories</Text>
+                  </View>
+                }
+              </View>
+              {recipe.description &&
+                <View style={styles.descContain}>
+                  <Text style={styles.sectionTitle}>Description</Text>
+                  <Text style={styles.desc}>{recipe.description}</Text>
+                </View>
+              }
+              {recipe.ingredients &&
+                <View style={styles.descContain}>
+                  <Text style={styles.sectionTitlePad}>Ingredients</Text>
+                  {recipe.ingredients.map((item, i) => (
+                    <TouchableHighlight
+                      key={i}
+                      onPress={() => {this.toggleCheck(i)}}
+                      underlayColor="transparent"
+                      style={{flex: 1}}
+                    >
+                      <View style={styles.checkbox}>
+                        <IconMd
+                          name={this.state.checks[i] ? "checkbox-marked" : "checkbox-blank-outline"} 
+                          color={this.state.checks[i] ? '#2c6' : '#333'} 
+                          size={20} 
+                        />
+                        <View style={styles.itemTextContain}>
+                          <Text style={styles.itemText}>{item}</Text>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                  ))}
+                  <TouchableHighlight
+                    onPress={() => {}}
+                    underlayColor="transparent"
+                    style={styles.addToCartButton}
+                  >
+                    <View style={styles.addToCart}>
+                      <Text style={styles.buttonText}>Add to Shopping Cart</Text>
+                      <Icon name="plus" size={15} color="#fff" />
+                    </View>
+                  </TouchableHighlight>
+                </View>
+              }
+              {recipe.directions &&
+                <View style={styles.descContain}>
+                  <Text style={styles.sectionTitlePad}>Directions</Text>
+                  {recipe.directions.map((item, i) => (
+                    <View key={i} style={styles.listItem}>
+                      <View style={styles.step}>
+                        <Text style={styles.stepNum}>{i + 1}</Text>
+                      </View>
+                      <Text style={styles.listItemText}>{item}</Text>
+                    </View>
+                  ))}
+                </View>
+              }
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    )
+  }
 }
 
 const { width, height } = Dimensions.get('window');
@@ -218,35 +263,19 @@ const styles = StyleSheet.create({
     paddingBottom: 5
   },
   listItemText: {
-    margin: 0,
-    padding: 0,
-    fontSize: 15,
-    lineHeight: 16,
+    marginTop: 2,
+    fontSize: 16,
+    lineHeight: 19,
     flex: 1
   },
-  bullet: {
-    height: 6,
-    width: 6,
-    borderRadius: 3,
-    marginTop: 5,
-    marginLeft: 8,
-    marginRight: 16,
-    backgroundColor: '#2c6'
-  },
   step: {
-    height: 20,
     width: 20,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 2,
-    marginRight: 10,
-    borderRadius: 10,
-    backgroundColor: '#2c6'
+    marginHorizontal: 5
   },
   stepNum: {
-    color: '#fff',
-    fontSize: 12,
+    color: '#2c6',
+    fontSize: 24,
+    fontFamily: 'Cochin',
     fontWeight: '900'
   },
   ratingContain: {
@@ -278,6 +307,41 @@ const styles = StyleSheet.create({
     color: '#666',
     fontWeight: 'bold',
     marginHorizontal: 5
+  },
+  checkbox: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: 5
+  },
+  itemTextContain: {
+    flex: 1,
+    paddingLeft: 10
+  },
+  itemText: {
+    fontSize: 16,
+    lineHeight: 19
+  },
+  addToCartButton: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    paddingTop: 10,
+    paddingBottom: 5
+  },
+  addToCart: {
+    flexGrow: 0,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 5,
+    backgroundColor: '#2c6',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginRight: 15,
   }
 })
 
