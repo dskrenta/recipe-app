@@ -7,7 +7,7 @@ const NodePoolScraper = require('node-pool-scraper');
 
 const scraper = new NodePoolScraper({
   max: 1,
-  min: 1,
+  min: 10,
   idleTimeoutMillis: 100000
 });
 
@@ -15,7 +15,7 @@ function appendFilePromise(file, data) {
   return new Promise((resolve, reject) => {
     fs.appendFile(file, data, (err) => {
       if (err) {
-        reject(err)
+        reject(err);
       }
       else {
         resolve();
@@ -27,7 +27,9 @@ function appendFilePromise(file, data) {
 async function grabRecipe({ url, browser }) {
   try {
     const page = await browser.newPage();
-    const status = await page.goto(url);
+    const status = await page.goto(url, {
+      waitUntil: 'networkidle'
+    });
 
     if (!status.ok) {
       console.error(`Cannot open ${url}`);
@@ -81,7 +83,7 @@ async function grabRecipe({ url, browser }) {
     const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
     await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
 
-    console.log(data.provider.recipeUrl);
+    console.log('Scraped: ', data.provider.recipeUrl);
   }
   catch (error) {
     console.error(error);
@@ -89,7 +91,7 @@ async function grabRecipe({ url, browser }) {
 }
 
 scraper.addTarget({
-  url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/bbq-duck-on-corn-cakes-recipe-2103370',
+  url: 'http://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
   func: grabRecipe
 });
 
@@ -100,7 +102,7 @@ const rl = readline.createInterface({
 });
 
 rl.on('line', (url) => {
-  console.log(url);
+  console.log('Added: ', url);
   scraper.addTarget({
     url,
     func: grabRecipe
