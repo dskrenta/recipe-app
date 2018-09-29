@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
   filterContain: {
     flex: 1,
     height: '100%',
-    padding: 20,
+    paddingTop: 20,
+    paddingHorizontal: 35,
     paddingBottom: 50,
   },
   filterTitle: {
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'stretch',
     backgroundColor: '#d3f8e2',
-    marginHorizontal: -20,
+    marginHorizontal: -35,
     marginBottom: 15
   },
   filterToggle: {
