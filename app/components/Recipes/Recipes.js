@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 import SearchWrap from '../Common/SearchWrap';
@@ -32,7 +32,7 @@ const samples = [
       `Vialone Nano grains are smaller, oval-shaped, and produce a delicate risotto with a nutty flavor. Find at A.G. Ferrari Foods (see above) and specialty stores.`,
       `Surprise: Sushi rice. Medium-grain Nishiki brand is creamy and chewy, and so much like Arborio that half our tasting panel couldn't tell the difference. Plus, it costs less than any Italian risotto rice.`
     ],
-    image: 'https://imagesvc.timeincapp.com/v3/mm/image?url=https%3A%2F%2Fcdn-image.myrecipes.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2Fmedium_2x%2Fpublic%2Fimage%2Frecipes%2Fsu%2F09%2F02%2Fparmesan-risotto-su-1873423-x.jpg%3Fitok%3DA6i8zol2&w=800&q=85',
+    image: 'https://d2814mmsvlryp1.cloudfront.net/wp-content/uploads/2012/05/WGC-Carrot-Risotto-2-copy-2.jpg',
     totalTime: 50,
     servings: '8-10',
     cuisine: 'Indian',
@@ -85,7 +85,7 @@ const samples = [
     image: 'https://imagesvc.timeincapp.com/v3/mm/image?url=https%3A%2F%2Fcdn-image.myrecipes.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2Fmedium_2x%2Fpublic%2Fimage%2Frecipes%2Fsu%2F09%2F02%2Fparmesan-risotto-su-1873423-x.jpg%3Fitok%3DA6i8zol2&w=800&q=85',
     totalTime: 50,
     servings: '8-10',
-    cuisine: 'Indian',
+    cuisine: 'Japaneese',
     course: 'Dinner',
     nutrition: {
       calories: 307,
@@ -108,7 +108,7 @@ const samples = [
   }
 ]
 
-const Recommended = ({ navigation }) => (
+const Recipes = ({ navigation }) => (
   <SafeAreaView>
     <SearchWrap navigation={navigation}>
       <View style={styles.carouselContain}>
@@ -119,7 +119,12 @@ const Recommended = ({ navigation }) => (
           pagingEnabled
         >
           {samples.map((recipe, i) => (
-            <RecipeCard key={i} recipe={recipe} />
+            <TouchableHighlight
+              onPress={() => {navigation.navigate('Recipe', { recipe })}}
+              underlayColor="transparent"
+            >
+              <RecipeCard key={i} recipe={recipe} />
+            </TouchableHighlight>
           ))}
         </ScrollView>
       </View>
@@ -136,4 +141,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Recommended;
+export default Recipes;
