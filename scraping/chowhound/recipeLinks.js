@@ -1,57 +1,56 @@
 const NodePoolScraper = require('node-pool-scraper');
+const fs = require('fs');
 
-async function main() {
-  const scraper = new NodePoolScraper({
-    max: 10, 
-    min: 1
-  });
-  
-  let links = [];
+const scraper = new NodePoolScraper({
+  max: 1, 
+  min: 1,
+  idleTimeoutMillis: 100000
+});
 
-  // Add scrape target
-  for (let i = 1; i <= 2; i++) {
-    await scraper.addTarget({
-      url: `https://www.chowhound.com/recipes?page=${i}`,
-      func: async ({ url, browser }) => {
+async function getLink({ url, browser }) {
+  try {
+    const page = await browser.newPage();
+    const status = await page.goto(url);
+
+    if (!status.ok) {
+      console.error(`Cannot open ${url}`);
+      throw new Error();
+    }
+
+    const result = await page.evaluate(() => {
+      let urls = [];
+      let items = document.querySelectorAll('.freyja_box7 > a');
+
+      items.forEach((item) => {
         try {
-          const page = await browser.newPage();
-          const status = await page.goto(url);
-
-          if (!status.ok) {
-            console.error(`Cannot open ${url}`);
-            throw new Error();
-          }
-
-          const result = await page.evaluate(() => {
-            let urls = [];
-            let items = document.querySelectorAll('.freyja_box7 > a');
-    
-            items.forEach((item) => {
-              try {
-                urls.push(`${item.getAttribute('href')}`);
-              }
-              catch (e) {
-                console.error(e);
-              }
-            });
-
-            return urls;
-          });
-
-          links.push(result)
-          return result;
+          urls.push(`${item.getAttribute('href')}`);
         }
-        catch (error) {
-          console.error(error);
+        catch (e) {
+          console.error(e);
         }
-      }
+      });
+
+      return urls;
     });
-  }
 
-  
-  // Destroy the pool
-  await scraper.clear();
-  console.log(links);
+    for (let url of result) {
+      fs.appendFile('recipeLinks.txt', `${url}\n`, (e) => {
+        if (e) throw e;
+      });
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
 }
 
-main();
+// 252 pages total
+// LEFT OFF AT 50
+for (let i = 3; i <= 50; i++) {
+  scraper.addTarget({
+    url: `https://www.chowhound.com/recipes?page=${i}`,
+    func: getLink
+  });
+}
+
+scraper.clear();
