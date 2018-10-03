@@ -22,7 +22,9 @@ async function getRecipe({ url, browser }) {
   try {
     const page = await browser.newPage();
     const status = await page.goto(url);
-    let recipe = {};
+    let recipe = {
+      url
+    };
 
     if (!status.ok) {
       console.error(`Cannot open ${url}`);
@@ -31,7 +33,6 @@ async function getRecipe({ url, browser }) {
 
     const result = await page.evaluate(() => {
       let obj = {}
-      const nutriButton = document.querySelector('.edaman_info_w');
 
       const title = document.querySelector('.fr_r_info h1').innerHTML;
       if (title) { obj.title = title; }
@@ -99,25 +100,48 @@ async function getRecipe({ url, browser }) {
             directions.push(`#${item.innerText}`);
           }
           else if (item.tagName === 'P') {
-            directions.push(`#${item.innerText}`);
+            if (item.children[0].tagName === 'STRONG') {
+              directions.push(`#${item.innerText}`);
+            }
           }
         }
         obj.directions = directions;
       }
 
-      obj.url = url;
+      const nutrition = {};
+      const nutritionItems = document.querySelectorAll('.edaman_info_w > ul > li');
+      if (nutritionItems) {
+        for (let item of nutritionItems) {
+          if (item.children.length === 3) {
+            let text = item.children[0].innerText.replace(/(\s)\S/g, l => l.toUpperCase()).replace(/\s+/g, '');
+            text = text.charAt(0).toLowerCase() + text.substring(1);
+            const value = parseFloat(item.children[2].innerText);
+            if (value) {
+              nutrition[text] = value;
+            }
+          }
+        }
+        if (Object.keys(nutrition).length !== 0) {
+          obj.nutrition = nutrition;
+        }
+      }
+
+      const nutritionServing = document.querySelector('.edamam_br > strong');
+      if (nutritionServing) {
+        const servings = nutritionServing.innerText;
+        obj.servings = parseFloat(servings.substring(1));
+      }
 
       return obj;
     });
 
-    recipe = result;
-    console.log(recipe);
+    
 
-    /*
+    recipe = result;
+
     if (recipe !== undefined) {
-      fs.`recipes/${crypto.createHash('md5').update(url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
-    } 
-    */
+      fs.writeFile(`recipes/${crypto.createHash('md5').update(url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
+    }
 
     console.log(url, ': DONE');
   }
@@ -133,9 +157,9 @@ async function main() {
     idleTimeoutMillis: 100000
   });
 
-  for (let line of lines.slice(0, 1)) {
+  for (let line of lines.slice(10, 20)) {
     scraper.addTarget({
-      url: `https://www.chowhound.com/recipes/easy-bbq-baby-back-pork-ribs-30741`,
+      url: `${line}`,
       func: getRecipe
     });
   }
