@@ -146,6 +146,8 @@ async function grabRecipe({ url, browser }) {
     let ingredients = null;
     let directions = null;
     let chef = null;
+    let level = null;
+    let servings = null;
     let provider = {
       siteUrl: 'https://www.foodnetwork.com/',
       recipeUrl: url,
@@ -167,6 +169,20 @@ async function grabRecipe({ url, browser }) {
       }
       return null;
     });
+
+    level = await page.evaluate(() => {
+      const levelElement = document.querySelector('span.o-RecipeInfo__a-Description');
+      
+      if (typeof(levelElement) !== 'undefined' && levelElement !== null) {
+        const extractedText = levelElement.textContent;
+        if (extractedText === 'Easy' || extractedText === 'Intermediate' || extractedText === 'Hard') {
+          return extractedText;
+        }
+      }
+      return null;
+    });
+
+    // servings
 
     image = await page.evaluate(() => {
       const oldImageElement = document.querySelector('img.o-AssetMultiMedia__a-Image')
@@ -209,11 +225,36 @@ async function grabRecipe({ url, browser }) {
     });
 
     ingredients = await page.evaluate(() => {
-      const newIngredientsIdentify = document.querySelector('section.o-Ingredients');
+      const newIngredientsIdentify = document.querySelector('p.o-Ingredients__a-Ingredient');
       if (typeof(newIngredientsIdentify) !== 'undefined' && newIngredientsIdentify !== null) {
         return Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => node.tagName === 'H6' ? `#${node.textContent.trim()}` : node.textContent.trim());
       }
       else {
+        const ingredients = [];
+        const ingredientsElement = document.querySelector('div.o-Ingredients__m-Body');
+
+        if (typeof(ingredientsElement) !== 'undefined' && ingredientsElement !== null) {
+          if (ingredientsElement.children.length > 0) {
+            const elements = Array.from(ingredientsElement.children);
+            for (let element of elements) {
+              if (element.tagName === 'H6') {
+                ingredients.push(`#${element.textContent.trim()}`);
+              }
+              else {
+                if (element.children.length > 0) {
+                  const subArrayIngredients = Array.from(element.children);
+                  for (let item of subArrayIngredients) {
+                    ingredients.push(item.textContent.trim());
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        return ingredients;
+
+        /*
         const finalIngredients = [];
         const ingredientsElement = document.querySelector('div.o-Ingredients__m-Body');
         if (typeof(ingredientsElement) !== 'undefined' && ingredientsElement !== null) {
@@ -229,6 +270,7 @@ async function grabRecipe({ url, browser }) {
         else {
           return [];
         }
+        */
       }
     });
 
@@ -277,6 +319,8 @@ async function grabRecipe({ url, browser }) {
       tags,
       ingredients, 
       directions, 
+      level,
+      servings,
       provider, 
       chef
     };
