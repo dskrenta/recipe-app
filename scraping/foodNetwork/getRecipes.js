@@ -8,10 +8,10 @@ const NodePoolScraper = require('node-pool-scraper');
 const scraper = new NodePoolScraper({
   max: 1,
   min: 1,
-  idleTimeoutMillis: 100000,
+  idleTimeoutMillis: 10000,
   headless: false,
   ignoreHTTPSErrors: true,
-  timeout: 120000
+  timeout: 30000
 });
 
 function appendFilePromise(file, data) {
@@ -151,20 +151,42 @@ async function grabRecipe({ url, browser }) {
       name: 'Food Network'
     };
 
+    // good
     title = await page.evaluate(() => {
       return document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
     });
+    console.log(title);
+  
+    // Wait for dynamically loaded rating to load
+    await page.waitFor(3000);
+
+    // good
+    rating = await page.evaluate(() => {
+      const ratingElement = document.querySelector('span.gig-rating-stars');
+
+      if (typeof(ratingElement) !== 'undefined' && ratingElement !== null) {
+        return parseInt(ratingElement.getAttribute('title').match(/^\d+/)[0]);
+      }
+      return null;
+    });
+    console.log(rating);
+
+    // good
+    image = await page.evaluate(() => {
+      const oldImageElement = document.querySelector('img.o-AssetMultiMedia__a-Image')
+      const newImageElement = document.querySelector('img.m-MediaBlock__a-Image.a-Image');
+
+      if (typeof(oldImageElement) !== 'undefined' && oldImageElement !== null) {
+        return `http:${oldImageElement.getAttribute('src')}`;
+      }
+      else if (typeof(newImageElement) !== 'undefined' && newImageElement !== null) {
+        return `http:${newImageElement.getAttribute('src')}`;
+      }
+      return null;
+    });
+    console.log(image);
 
     /*
-    rating = await page.evaluate(() => {
-      return parseInt(document.querySelector('span.gig-rating-stars').getAttribute('title').match(/^\d+/)[0]);
-    })
-    */
-
-    image = await page.evaluate(() => {
-      return `http:${document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src')}`;
-    });
-
     totalTime = await page.evaluate(() => {
       let time;
       const times = document.querySelector('dd.o-RecipeInfo__a-Description--Total').textContent.match(/\d+/g).map(elem => parseInt(elem));
@@ -176,11 +198,15 @@ async function grabRecipe({ url, browser }) {
       } 
       return time;
     });
+    */
 
+    // good
     tags = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('a.o-Capsule__a-Tag.a-Tag')).map(node => node.textContent);
     });
+    console.log(tags);
 
+    /*
     ingredients = await page.evaluate(() => {
       let finalIngredients;
       const ingredientsElement = document.querySelector('div.div.o-Ingredients__m-Body');
@@ -222,6 +248,7 @@ async function grabRecipe({ url, browser }) {
     };
 
     console.log(recipe);
+    */
 
     // const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
     // await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
