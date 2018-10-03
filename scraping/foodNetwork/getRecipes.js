@@ -171,18 +171,45 @@ async function grabRecipe({ url, browser }) {
     });
 
     level = await page.evaluate(() => {
-      const levelElement = document.querySelector('span.o-RecipeInfo__a-Description');
-      
-      if (typeof(levelElement) !== 'undefined' && levelElement !== null) {
-        const extractedText = levelElement.textContent;
+      const newLevelElement = document.querySelector('span.o-RecipeInfo__a-Description');
+      const oldLevelElement = document.querySelector('section.o-RecipeInfo.o-Level > dl > dd.o-RecipeInfo__a-Description');
+
+      if (typeof(newLevelElement) !== 'undefined' && newLevelElement !== null) {
+        const extractedText = newLevelElement.textContent;
         if (extractedText === 'Easy' || extractedText === 'Intermediate' || extractedText === 'Hard') {
           return extractedText;
         }
       }
+
+      if (typeof(oldLevelElement) !== 'undefined' && oldLevelElement !== null) {
+        return oldLevelElement.textContent.trim();
+      }
+
       return null;
     });
 
-    // servings
+    servings = await page.evaluate(() => {
+      const newServingsElement = document.querySelector('ul.o-RecipeInfo__m-Yield > li > span.o-RecipeInfo__a-Description');
+      const oldServingsElement = document.querySelector('section.o-RecipeInfo.o-Yield > dl > dd.o-RecipeInfo__a-Description');
+
+      if (typeof(newServingsElement) !== 'undefined' && newServingsElement !== null) {
+        const str = newServingsElement.textContent;
+        const match = str.match(/\d+/);
+        if (match !== null) {
+          return parseInt(match[0]);
+        }
+      }
+
+      if (typeof(oldServingsElement) !== 'undefined' && oldServingsElement !== null) {
+        const str = oldServingsElement.textContent;
+        const match = str.match(/\d+/);
+        if (match !== null) {
+          return parseInt(match[0]);
+        }
+      }
+
+      return null;
+    });
 
     image = await page.evaluate(() => {
       const oldImageElement = document.querySelector('img.o-AssetMultiMedia__a-Image')
