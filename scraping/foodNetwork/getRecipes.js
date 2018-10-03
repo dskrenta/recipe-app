@@ -155,7 +155,6 @@ async function grabRecipe({ url, browser }) {
     title = await page.evaluate(() => {
       return document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
     });
-    console.log(title);
   
     // Wait for dynamically loaded rating to load
     await page.waitFor(3000);
@@ -169,7 +168,6 @@ async function grabRecipe({ url, browser }) {
       }
       return null;
     });
-    console.log(rating);
 
     // good
     image = await page.evaluate(() => {
@@ -184,12 +182,21 @@ async function grabRecipe({ url, browser }) {
       }
       return null;
     });
-    console.log(image);
 
-    /*
     totalTime = await page.evaluate(() => {
       let time;
-      const times = document.querySelector('dd.o-RecipeInfo__a-Description--Total').textContent.match(/\d+/g).map(elem => parseInt(elem));
+      let times;
+
+      const oldTimeElement = document.querySelector('dd.o-RecipeInfo__a-Description--Total');
+      const newTimeElement = document.querySelector('span.o-RecipeInfo__a-Description.m-RecipeInfo__a-Description--Total')
+
+      if (typeof(oldTimeElement) !== 'undefined' && oldTimeElement !== null) {
+        times = oldTimeElement.textContent.match(/\d+/g).map(elem => parseInt(elem));
+      }
+      else if (typeof(newTimeElement) !== 'undefined' && newTimeElement !== null) {
+        times = newTimeElement.textContent.match(/\d+/g).map(elem => parseInt(elem));
+      }
+
       if (times.length > 1) {
         time = (times[0] * 60) + times[1];
       }
@@ -198,40 +205,49 @@ async function grabRecipe({ url, browser }) {
       } 
       return time;
     });
-    */
 
     // good
     tags = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('a.o-Capsule__a-Tag.a-Tag')).map(node => node.textContent);
     });
-    console.log(tags);
 
-    /*
     ingredients = await page.evaluate(() => {
-      let finalIngredients;
-      const ingredientsElement = document.querySelector('div.div.o-Ingredients__m-Body');
-      if (typeof(ingredientsElement) !== 'undefined' && ingredientsElement !== null) {
-        if (ingredientsElement.children.length > 0) {
-          Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => {
-            node.tagName === 'H6' 
-              ? `#${node.textContent.trim()}` 
-              : Array.from(node.children).map(node => node.textContent.trim())
-          }).forEach(ingredient => (typeof ingredient === 'string') ? finalIngredients.push(ingredient) : finalIngredients = [...finalIngredients, ...ingredient]);
-          return finalIngredients;
-        }
+      const newIngredientsIdentify = document.querySelector('section.o-Ingredients');
+      if (typeof(newIngredientsIdentify) !== 'undefined' && newIngredientsIdentify !== null) {
+        return Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => node.tagName === 'H6' ? `#${node.textContent.trim()}` : node.textContent.trim());
       }
       else {
-        return [];
+        const finalIngredients = [];
+        const ingredientsElement = document.querySelector('div.o-Ingredients__m-Body');
+        if (typeof(ingredientsElement) !== 'undefined' && ingredientsElement !== null) {
+          if (ingredientsElement.children.length > 0) {
+            Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => {
+              node.tagName === 'H6' 
+                ? `#${node.textContent.trim()}` 
+                : Array.from(node.children).map(node => node.textContent.trim())
+            }).forEach(ingredient => (typeof ingredient === 'string') ? finalIngredients.push(ingredient) : finalIngredients = [...finalIngredients, ...ingredient]);
+            return finalIngredients;
+          }
+        }
+        else {
+          return [];
+        }
       }
     });
 
     directions = await page.evaluate(() => {
       const directionsElement = document.querySelector('div.o-Method__m-Body');
+      const newElementIdentify = document.querySelector('li.o-Method__m-Step');
       if (typeof(directionsElement) !== 'undefined' && directionsElement !== null) {
-        if (directionsElement.children.length > 0) {
-          return Array.from(directionsElement.children).map(node => node.tagName === 'H4' ? `#${node.textContent.trim()}` : node.textContent.trim());
+        if (typeof(newElementIdentify) !== 'undefined' && newElementIdentify !== null) {
+          return Array.from(document.querySelectorAll('li.o-Method__m-Step')).map(node => node.textContent.trim());
         }
-        return [];
+        else {
+          if (directionsElement.children.length > 0) {
+            return Array.from(directionsElement.children).map(node => node.tagName === 'H4' ? `#${node.textContent.trim()}` : node.textContent.trim());
+          }
+          return [];
+        }
       }
       return [];
     });
@@ -248,7 +264,6 @@ async function grabRecipe({ url, browser }) {
     };
 
     console.log(recipe);
-    */
 
     // const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
     // await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
@@ -261,7 +276,8 @@ async function grabRecipe({ url, browser }) {
 }
 
 scraper.addTarget({
-  url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
+  // url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
+  url: 'https://www.foodnetwork.com/recipes/biscuits-and-gravy-orange-ginger-biscuits-with-scallion-pork-sausage-gravy-sesame-mustard-greens-and-soy-glazed-bacon-recipe-2040581',
   func: grabRecipe
 });
 
