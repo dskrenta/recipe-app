@@ -145,13 +145,13 @@ async function grabRecipe({ url, browser }) {
     let tags = null;
     let ingredients = null;
     let directions = null;
+    let chef = null;
     let provider = {
       siteUrl: 'https://www.foodnetwork.com/',
       recipeUrl: url,
       name: 'Food Network'
     };
 
-    // good
     title = await page.evaluate(() => {
       return document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
     });
@@ -159,7 +159,6 @@ async function grabRecipe({ url, browser }) {
     // Wait for dynamically loaded rating to load
     await page.waitFor(3000);
 
-    // good
     rating = await page.evaluate(() => {
       const ratingElement = document.querySelector('span.gig-rating-stars');
 
@@ -169,7 +168,6 @@ async function grabRecipe({ url, browser }) {
       return null;
     });
 
-    // good
     image = await page.evaluate(() => {
       const oldImageElement = document.querySelector('img.o-AssetMultiMedia__a-Image')
       const newImageElement = document.querySelector('img.m-MediaBlock__a-Image.a-Image');
@@ -206,7 +204,6 @@ async function grabRecipe({ url, browser }) {
       return time;
     });
 
-    // good
     tags = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('a.o-Capsule__a-Tag.a-Tag')).map(node => node.textContent);
     });
@@ -252,6 +249,26 @@ async function grabRecipe({ url, browser }) {
       return [];
     });
 
+    chef = await page.evaluate(() => {
+      let chef = {};
+
+      const avatarElement = document.querySelector('img.o-Attribution__a-Image');
+      const chefElement = document.querySelector('span.o-Attribution__a-Name > a');
+
+      if (typeof(avatarElement) !== 'undefined' && avatarElement !== null) {
+        chef.avatar = `http:${avatarElement.getAttribute('src')}`;
+      }
+      if (typeof(chefElement) !== 'undefined' && chefElement !== null) {
+        chef.url = chefElement.getAttribute('href');
+        chef.name = chefElement.textContent.replace('Recipe courtesy of ', '');
+      }
+
+      if (Object.keys(chef).length > 0) {
+        return chef;
+      }
+      return null;
+    });
+
     const recipe = {
       title,
       rating,
@@ -260,7 +277,8 @@ async function grabRecipe({ url, browser }) {
       tags,
       ingredients, 
       directions, 
-      provider 
+      provider, 
+      chef
     };
 
     console.log(recipe);
@@ -277,7 +295,8 @@ async function grabRecipe({ url, browser }) {
 
 scraper.addTarget({
   // url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
-  url: 'https://www.foodnetwork.com/recipes/biscuits-and-gravy-orange-ginger-biscuits-with-scallion-pork-sausage-gravy-sesame-mustard-greens-and-soy-glazed-bacon-recipe-2040581',
+  // url: 'https://www.foodnetwork.com/recipes/biscuits-and-gravy-orange-ginger-biscuits-with-scallion-pork-sausage-gravy-sesame-mustard-greens-and-soy-glazed-bacon-recipe-2040581',
+  url: 'https://www.foodnetwork.com/recipes/party-sausage-pizza-rolls-2269307',
   func: grabRecipe
 });
 
