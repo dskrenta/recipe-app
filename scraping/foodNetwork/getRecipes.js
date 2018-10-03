@@ -6,10 +6,10 @@ const crypto = require('crypto');
 const NodePoolScraper = require('node-pool-scraper');
 
 const scraper = new NodePoolScraper({
-  max: 1,
+  max: 4,
   min: 1,
   idleTimeoutMillis: 10000,
-  headless: false,
+  // headless: false,
   ignoreHTTPSErrors: true,
   timeout: 30000
 });
@@ -354,24 +354,25 @@ async function grabRecipe({ url, browser }) {
 
     console.log(recipe);
 
-    // const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
-    // await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
+    const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
+    await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
 
-    // console.log('Scraped: ', data.provider.recipeUrl);
+    console.log('Scraped: ', data.provider.recipeUrl);
   }
   catch (error) {
     console.error(error);
   }
 }
 
+/*
 scraper.addTarget({
   // url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
   // url: 'https://www.foodnetwork.com/recipes/biscuits-and-gravy-orange-ginger-biscuits-with-scallion-pork-sausage-gravy-sesame-mustard-greens-and-soy-glazed-bacon-recipe-2040581',
   url: 'https://www.foodnetwork.com/recipes/party-sausage-pizza-rolls-2269307',
   func: grabRecipe
 });
+*/
 
-/*
 const rl = readline.createInterface({
   input: fs.createReadStream('foodNetworkRecipeUrls.txt'),
   crlfDelay: Infinity
@@ -384,4 +385,3 @@ rl.on('line', (url) => {
     func: grabRecipe
   });
 });
-*/
