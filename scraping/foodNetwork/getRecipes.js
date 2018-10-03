@@ -10,7 +10,8 @@ const scraper = new NodePoolScraper({
   min: 1,
   idleTimeoutMillis: 100000,
   headless: false,
-  ignoreHTTPSErrors: true
+  ignoreHTTPSErrors: true,
+  timeout: 120000
 });
 
 function appendFilePromise(file, data) {
@@ -26,6 +27,7 @@ function appendFilePromise(file, data) {
   });
 }
 
+/*
 async function grabRecipe({ url, browser }) {
   try {
     const page = await browser.newPage();
@@ -122,9 +124,117 @@ async function grabRecipe({ url, browser }) {
     console.error(error);
   }
 }
+*/
+
+async function grabRecipe({ url, browser }) {
+  try {
+    const page = await browser.newPage();
+    const status = await page.goto(url, {
+      waitUntil: 'domcontentloaded'
+    });
+
+    if (!status.ok) {
+      console.error(`Cannot open ${url}`);
+      throw new Error();
+    }
+
+    let title = null;
+    let rating = null;
+    let image = null;
+    let totalTime = null;
+    let tags = null;
+    let ingredients = null;
+    let directions = null;
+    let provider = {
+      siteUrl: 'https://www.foodnetwork.com/',
+      recipeUrl: url,
+      name: 'Food Network'
+    };
+
+    title = await page.evaluate(() => {
+      return document.querySelector('span.o-AssetTitle__a-HeadlineText').textContent;
+    });
+
+    /*
+    rating = await page.evaluate(() => {
+      return parseInt(document.querySelector('span.gig-rating-stars').getAttribute('title').match(/^\d+/)[0]);
+    })
+    */
+
+    image = await page.evaluate(() => {
+      return `http:${document.querySelector('img.o-AssetMultiMedia__a-Image').getAttribute('src')}`;
+    });
+
+    totalTime = await page.evaluate(() => {
+      let time;
+      const times = document.querySelector('dd.o-RecipeInfo__a-Description--Total').textContent.match(/\d+/g).map(elem => parseInt(elem));
+      if (times.length > 1) {
+        time = (times[0] * 60) + times[1];
+      }
+      else {
+        time = times[0];
+      } 
+      return time;
+    });
+
+    tags = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('a.o-Capsule__a-Tag.a-Tag')).map(node => node.textContent);
+    });
+
+    ingredients = await page.evaluate(() => {
+      let finalIngredients;
+      const ingredientsElement = document.querySelector('div.div.o-Ingredients__m-Body');
+      if (typeof(ingredientsElement) !== 'undefined' && ingredientsElement !== null) {
+        if (ingredientsElement.children.length > 0) {
+          Array.from(document.querySelector('div.o-Ingredients__m-Body').children).map(node => {
+            node.tagName === 'H6' 
+              ? `#${node.textContent.trim()}` 
+              : Array.from(node.children).map(node => node.textContent.trim())
+          }).forEach(ingredient => (typeof ingredient === 'string') ? finalIngredients.push(ingredient) : finalIngredients = [...finalIngredients, ...ingredient]);
+          return finalIngredients;
+        }
+      }
+      else {
+        return [];
+      }
+    });
+
+    directions = await page.evaluate(() => {
+      const directionsElement = document.querySelector('div.o-Method__m-Body');
+      if (typeof(directionsElement) !== 'undefined' && directionsElement !== null) {
+        if (directionsElement.children.length > 0) {
+          return Array.from(directionsElement.children).map(node => node.tagName === 'H4' ? `#${node.textContent.trim()}` : node.textContent.trim());
+        }
+        return [];
+      }
+      return [];
+    });
+
+    const recipe = {
+      title,
+      rating,
+      image, 
+      totalTime,
+      tags,
+      ingredients, 
+      directions, 
+      provider 
+    };
+
+    console.log(recipe);
+
+    // const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
+    // await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
+
+    // console.log('Scraped: ', data.provider.recipeUrl);
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
 
 scraper.addTarget({
-  url: 'http://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
+  url: 'https://www.foodnetwork.com/recipes/food-network-kitchen/zucchini-ricotta-salata-recipe-2105421',
   func: grabRecipe
 });
 
