@@ -67,7 +67,6 @@ https://www.chowhound.com/recipes/angel-hair-pasta-blood-oranges-escarole-32035
 https://www.chowhound.com/recipes/sweet-sour-eggplant-32032
 https://www.chowhound.com/recipes/roasted-carrot-parsnip-salad-grapes-blue-cheese-spiced-pecans-32033
 https://www.chowhound.com/recipes/brussels-sprouts-maple-butter-iberico-ham-32034
-https://www.chowhound.com/recipes/baked-zucchini-fries-marinara-dipping-sauce-32030
 https://www.chowhound.com/recipes/coffee-smoothie-32029
 https://www.chowhound.com/recipes/fennel-jicama-salad-lemon-pink-peppercorn-dressing-32031
 https://www.chowhound.com/recipes/sisig-filipino-sizzling-pork-30381
@@ -115,7 +114,6 @@ https://www.chowhound.com/recipes/scallop-aguachile-avocado-puree-32011
 https://www.chowhound.com/recipes/savory-cheese-cookies-32003
 https://www.chowhound.com/recipes/dutch-applesauce-raisin-cake-32004
 https://www.chowhound.com/recipes/braised-endive-bacon-mustard-sauce-32005
-https://www.chowhound.com/recipes/butternut-squash-tamal-honey-nut-fudge-sikil-pak-castelrosso-pumpkin-seeds-32010
 https://www.chowhound.com/recipes/avocado-yogurt-dip-32006
 https://www.chowhound.com/recipes/twice-cooked-sweet-potatoes-rosemary-hazelnuts-creme-fraiche-32007
 https://www.chowhound.com/recipes/enriched-polenta-porridge-raspberries-creme-fraiche-32008
@@ -231,7 +229,6 @@ https://www.chowhound.com/recipes/champagne-gelee-strawberries-31945
 https://www.chowhound.com/recipes/madames-choice-31943
 https://www.chowhound.com/recipes/fluffy-grain-flour-pancakes-31944
 https://www.chowhound.com/recipes/blue-bullet-31941
-https://www.chowhound.com/recipes/fresh-mango-lemonade-31940
 https://www.chowhound.com/recipes/grilled-jerk-chicken-skewers-fresh-mango-salsa-31939
 https://www.chowhound.com/recipes/rosemary-elite-31942
 https://www.chowhound.com/recipes/crab-salad-mango-avocado-lemon-herb-dressing-31938
@@ -264,7 +261,6 @@ https://www.chowhound.com/recipes/oreo-snowman-balls-31884
 https://www.chowhound.com/recipes/quick-vegetarian-pho-31911
 https://www.chowhound.com/recipes/la-perla-rosa-31912
 https://www.chowhound.com/recipes/rigatoni-merguez-ricotta-salata-brown-butter-31910
-https://www.chowhound.com/recipes/smoky-rubbed-chicken-wings-honey-bourbon-molasses-sauce-31908
 https://www.chowhound.com/recipes/black-bottomed-butterscotch-pots-de-creme-31905
 https://www.chowhound.com/recipes/quick-chicken-pho-31909
 https://www.chowhound.com/recipes/rear-admiral-swizzle-31906
@@ -283,7 +279,6 @@ https://www.chowhound.com/recipes/polenta-pizzas-31894
 https://www.chowhound.com/recipes/cauliflower-hummus-31893
 https://www.chowhound.com/recipes/crispy-kale-paprika-truffle-salt-31892
 https://www.chowhound.com/recipes/foil-pouch-sea-bass-31890
-https://www.chowhound.com/recipes/cucumber-salad-trout-ways-sesame-yogurt-31891
 https://www.chowhound.com/recipes/gluten-free-chicken-parmesan-zucchini-noodles-31889
 https://www.chowhound.com/recipes/blackened-tilapia-chayote-mango-pasta-salad-31888
 https://www.chowhound.com/recipes/paper-bag-popcorn-31887
@@ -305,7 +300,6 @@ https://www.chowhound.com/recipes/matcha-hong-kong-egg-waffles-31870
 https://www.chowhound.com/recipes/dark-chocolate-avocado-mousse-coconut-cream-31868
 https://www.chowhound.com/recipes/creme-de-marron-au-rhum-31869
 https://www.chowhound.com/recipes/salted-caramel-brownies-31867
-https://www.chowhound.com/recipes/peanut-butter-cup-brownies-31865
 https://www.chowhound.com/recipes/pumpkin-layer-cake-31866
 https://www.chowhound.com/recipes/roasted-pear-cranberry-brussels-sprouts-31864
 https://www.chowhound.com/recipes/olive-mushroom-smothered-pork-tenderloin-31863
@@ -342,7 +336,6 @@ https://www.chowhound.com/recipes/chile-infused-honey-31832
 https://www.chowhound.com/recipes/vanilla-bundt-cake-strawberries-31830
 https://www.chowhound.com/recipes/pizza-stuffed-chicken-31829
 https://www.chowhound.com/recipes/potato-gnocchi-sage-butter-31827
-https://www.chowhound.com/recipes/gnocchi-cream-sauce-baked-blue-cheese-31826
 https://www.chowhound.com/recipes/gnocchi-pork-ragu-31823
 https://www.chowhound.com/recipes/italian-sausage-calzone-31825
 https://www.chowhound.com/recipes/blueberry-smash-cake-31824
@@ -356,7 +349,6 @@ https://www.chowhound.com/recipes/easy-shrimp-pho-31811
 https://www.chowhound.com/recipes/funfetti-cake-milkshake-31808
 https://www.chowhound.com/recipes/turmeric-chicken-skewers-cilantro-coconut-lime-dip-31805
 https://www.chowhound.com/recipes/overnight-oats-summer-fruit-31804
-https://www.chowhound.com/recipes/chocolate-covered-ice-cream-bites-31803
 https://www.chowhound.com/recipes/curry-chicken-salad-31802
 https://www.chowhound.com/recipes/buffalo-chicken-grilled-cheese-31801
 https://www.chowhound.com/recipes/matcha-muffins-31796

@@ -21,7 +21,9 @@ rl.on('close', () => {
 async function getRecipe({ url, browser }) {
   try {
     const page = await browser.newPage();
-    const status = await page.goto(url);
+    const status = await page.goto(url, {
+      waitUntil: 'domcontentloaded'
+    });
     let recipe = {
       url
     };
@@ -34,32 +36,35 @@ async function getRecipe({ url, browser }) {
     const result = await page.evaluate(() => {
       let obj = {}
 
-      const title = document.querySelector('.fr_r_info h1').innerHTML;
-      if (title) { obj.title = title; }
-      
+      const title = document.querySelector('.fr_r_info h1');
+      if (title) { obj.title = title.innerHTML; }
+
       const tags = Array.from(document.querySelectorAll('.freyja_fulltags .freyja_tag')).map(tag => tag.getAttribute('data-name'));
       if (tags) { obj.tags = tags; }
 
-      const image = document.querySelector('.fr_objfitimg').getAttribute('src');
-      if (image) { obj.image = image; }
-      
-      const serves = parseFloat(document.querySelector('.frr_serves').innerHTML);
-      if (serves) { obj.servings = serves; }
-      
+      const image = document.querySelector('.fr_objfitimg');
+      if (image) { obj.image = image.getAttribute('src'); }
+
+      const serves = document.querySelector('.frr_serves');
+      if (serves) { obj.servings = parseFloat(serves.innerHTML); }
+
       const rating = parseFloat((document.querySelector('.chow_rating_display > .viewport').offsetWidth * 5 / document.querySelector('.chow_rating_display > .lower_layer').offsetWidth).toFixed(1));
       if (rating) { obj.rating = rating; }
-      
+
       const description = Array.from(document.querySelectorAll('.frr_summary > p')).map(node => node.innerText).join("\n");
       if (description) { obj.description = description; }
-      
-      const totalTime = document.querySelector('.frr_totaltime > time').innerText;
+
+      const totalTime = document.querySelector('.frr_totaltime > time');
       if (totalTime) {
         let total = 0;
-        const newTime = totalTime.split(',')[0];
-        const times = newTime.match(/\d{1,2} [h|m]/g);
+        const newTime = totalTime.innerText.split(',')[0];
+        const times = newTime.match(/\d{1,2} [d|h|m|D|H|M]/g);
         for (let time of times) {
           if (time[time.length - 1] === 'h') {
             total += parseFloat(time.match(/\d{1,2}/) * 60);
+          }
+          else if (time[time.length - 1] === 'd') {
+            total += parseFloat(time.match(/\d{1,2}/) * 60 * 24);
           }
           else {
             total += parseFloat(time.match(/\d{1,2}/))
@@ -69,9 +74,9 @@ async function getRecipe({ url, browser }) {
       }
 
       let ingredients = [];
-      const ingredientList = document.querySelector('.freyja_box81').children;
+      const ingredientList = document.querySelector('.freyja_box81');
       if (ingredientList) {
-        for (let item of ingredientList) {
+        for (let item of ingredientList.children) {
           if (item.tagName === 'UL') {
             const lis = item.children;
             for (let child of lis) {
@@ -100,8 +105,10 @@ async function getRecipe({ url, browser }) {
             directions.push(`#${item.innerText}`);
           }
           else if (item.tagName === 'P') {
-            if (item.children[0].tagName === 'STRONG') {
-              directions.push(`#${item.innerText}`);
+            if (item.children[0]) {
+              if (item.children[0].tagName === 'STRONG') {
+                directions.push(`#${item.innerText}`);
+              }
             }
           }
         }
@@ -135,12 +142,10 @@ async function getRecipe({ url, browser }) {
       return obj;
     });
 
-    
-
     recipe = result;
 
     if (recipe !== undefined) {
-      fs.writeFile(`recipes/${crypto.createHash('md5').update(url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
+      await fs.writeFile(`recipes/${crypto.createHash('md5').update(url).digest("hex")}.json`, JSON.stringify(recipe), (e) => {if (e) throw e})
     }
 
     console.log(url, ': DONE');
@@ -152,12 +157,15 @@ async function getRecipe({ url, browser }) {
 
 async function main() {
   const scraper = new NodePoolScraper({
-    max: 1, 
+    max: 2,
     min: 1,
-    idleTimeoutMillis: 100000
+    idleTimeoutMillis: 50000,
+    timeout: 50000
   });
 
-  for (let line of lines.slice(10, 20)) {
+  let i = 5000;
+
+  for (let line of lines.slice(i)) {
     scraper.addTarget({
       url: `${line}`,
       func: getRecipe
