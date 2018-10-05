@@ -1,23 +1,25 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
 const tabs = [
   {
-    name: 'Random',
-    icon: 'question-circle-o',
-    activeIcon: 'question-circle'
+    name: 'Recipes',
+    icon: 'clipboard-list'
   },
   {
-    name: 'Recommended',
-    icon: 'star-o',
-    activeIcon: 'star'
+    name: 'Random',
+    icon: 'question-circle'
+  },
+  {
+    name: 'ShoppingList',
+    icon: 'shopping-cart'
   },
   {
     name: 'Saved',
-    icon: 'bookmark-o',
-    activeIcon: 'bookmark'
+    icon: 'bookmark'
   }
 ];
 
@@ -26,8 +28,8 @@ const TabBar = ({ navigation }) => {
   return (
     <View style={styles.contain}>
       {tabs.map((tab, i) => (
-        <TouchableHighlight 
-          key={i} 
+        <TouchableHighlight
+          key={i}
           onPress={() => (navigation.navigate(tab.name))}
           underlayColor="transparent"
           style={{width: '33%'}}
@@ -35,19 +37,28 @@ const TabBar = ({ navigation }) => {
           <View
             style={styles.tab}
           >
-            <Icon 
-              name={activeRoute === tab.name ? tab.activeIcon : tab.icon} 
-              color={activeRoute === tab.name ? '#2c6' : '#aaa'}
-              size={30}
-              style={{marginBottom: 3}}
-            />
-            <Text style={{color: activeRoute === tab.name ? '#2c6' : '#aaa'}}>{tab.name}</Text>
+            {i % 2
+              ? <Icon
+                  name={tab.icon}
+                  color={activeRoute === tab.name ? '#2c6' : '#aaa'}
+                  size={33}
+                  style={{marginBottom: 3}}
+                />
+              : <Icon5
+                  name={tab.icon}
+                  color={activeRoute === tab.name ? '#2c6' : '#aaa'}
+                  size={30}
+                  style={{marginBottom: 3}}
+                />
+            }
           </View>
         </TouchableHighlight>
       ))}
     </View>
   );
 };
+
+{/*<Text style={{color: activeRoute === tab.name ? '#2c6' : '#aaa'}}>{tab.name}</Text>*/}
 
 const styles = StyleSheet.create({
   contain: {
@@ -57,7 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     height: 60,
     marginBottom: iPhoneStyle(20, 5, 5),
-    paddingHorizontal: 15
+    paddingHorizontal: 0
   },
   tab: {
     flex: 1,
