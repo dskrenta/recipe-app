@@ -40,6 +40,16 @@ class ShoppingList extends React.Component {
     this.setState({ checks: newChecks, list: newList });
   }
 
+  addItem = () => {
+    const newList = [...this.state.list, this.state.value];
+    const newChecks = [...this.state.checks, 0];
+    this.setState({
+      checks: newChecks,
+      list: newList,
+      value: ''
+    })
+  }
+
   onSubmit = () => {
     const newList = [...this.state.list, this.state.value]
     this.setState({ value: '', list: newList })
@@ -55,37 +65,39 @@ class ShoppingList extends React.Component {
               <Text style={styles.title}>Shopping List</Text>
             </View>
             <ScrollView style={styles.scrollView}>
-              {this.state.list.map((item, i) => (
-                <View key={i} style={styles.item}>
-                  <TouchableHighlight
-                    onPress={() => {this.toggleCheck(i)}}
-                    underlayColor="transparent"
-                    style={{flex: 1}}
-                  >
-                    <View style={styles.checkbox}>
-                      <Icon 
-                        name={this.state.checks[i] ? "checkbox-marked" : "checkbox-blank-outline"} 
-                        color={this.state.checks[i] ? '#2c6' : '#333'} 
-                        size={20} 
-                      />
-                      <View style={styles.itemTextContain}>
-                        <Text style={[styles.itemText, this.state.checks[i] && {textDecorationLine: 'line-through', color: '#1a5'}]}>{item}</Text>
+              <View style={styles.innerScroll}>
+                {this.state.list.map((item, i) => (
+                  <View key={i} style={styles.item}>
+                    <TouchableHighlight
+                      onPress={() => {this.toggleCheck(i)}}
+                      underlayColor="transparent"
+                      style={{flex: 1}}
+                    >
+                      <View style={styles.checkbox}>
+                        <Icon
+                          name={this.state.checks[i] ? "checkbox-marked" : "checkbox-blank-outline"}
+                          color={this.state.checks[i] ? '#2c6' : '#333'}
+                          size={20}
+                        />
+                        <View style={styles.itemTextContain}>
+                          <Text style={[styles.itemText, this.state.checks[i] && {textDecorationLine: 'line-through', color: '#1a5'}]}>{item}</Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    onPress={() => {this.delete(i)}}
-                    underlayColor="transparent"
-                    style={styles.delete}
-                  >
-                    <Icon name="close" color="#888" size={15} />
-                  </TouchableHighlight>
-                </View>
-              ))}
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      onPress={() => {this.delete(i)}}
+                      underlayColor="transparent"
+                      style={styles.delete}
+                    >
+                      <Icon name="close" color="#888" size={15} />
+                    </TouchableHighlight>
+                  </View>
+                ))}
+              </View>
             </ScrollView>
             <View style={styles.inputContain}>
               <View style={styles.searchBox}>
-                <TextInput 
+                <TextInput
                   placeholder="Add Ingredient"
                   style={styles.addInput}
                   value={this.state.value}
@@ -123,8 +135,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold'
   },
-  scrollView: {
-    paddingTop: 20
+  innerScroll: {
+    paddingTop: 10,
+    paddingBottom: 15
   },
   item: {
     display: 'flex',
@@ -176,7 +189,7 @@ const styles = StyleSheet.create({
   },
   add: {
     marginHorizontal: 25,
-    marginVertical: 10 
+    marginVertical: 10
   },
   addInput: {
     flex: 1,
