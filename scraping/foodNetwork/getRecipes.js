@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const NodePoolScraper = require('node-pool-scraper');
 
 const scraper = new NodePoolScraper({
-  max: 4,
+  max: 1,
   min: 1,
   idleTimeoutMillis: 10000,
   // headless: false,
@@ -354,13 +354,13 @@ async function grabRecipe({ url, browser }) {
 
     console.log(recipe);
 
-    const fileName = crypto.createHash('md5').update(data.provider.recipeUrl).digest('hex');
-    await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(data));
+    const fileName = crypto.createHash('md5').update(recipe.provider.recipeUrl).digest('hex');
+    await appendFilePromise(`./recipes/${fileName}.json`, JSON.stringify(recipe));
 
-    console.log('Scraped: ', data.provider.recipeUrl);
+    console.log('Scraped: ', recipe.provider.recipeUrl);
   }
   catch (error) {
-    console.error(error);
+    console.error(error, url);
   }
 }
 
