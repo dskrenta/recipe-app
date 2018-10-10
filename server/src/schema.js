@@ -19,11 +19,11 @@ const schema = gql`
     servings: Float
     cusine: String
     course: String
-    createdAt: String!
+    createdAt: String
     chef: Chef
     rating: Float
-    provider: Provider!
-    level: LevelType!
+    provider: Provider
+    level: LevelType
   }
 
   enum LevelType {
@@ -33,8 +33,8 @@ const schema = gql`
   }
 
   type Nutrition {
-    title: String!
-    amountPerServing: String!
+    title: String
+    amountPerServing: String
     calories: Float
     caloriesFromFat: Float
     totalFat: Float

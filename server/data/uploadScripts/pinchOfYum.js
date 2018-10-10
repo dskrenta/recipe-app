@@ -8,7 +8,8 @@ const readDirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 
 const client = new elasticsearch.Client({
-  host: 'https://search-presearch-wiki-y54jqrsrtnje57wd5ogbpliuiy.us-west-1.es.amazonaws.com',
+  // host: 'https://search-presearch-wiki-y54jqrsrtnje57wd5ogbpliuiy.us-west-1.es.amazonaws.com',
+  host: 'http://localhost:9200',
   log: 'trace'
 });
 
@@ -42,12 +43,14 @@ async function main() {
         body: recipe
       });
 
+      /*
       if (res.created) {
         console.log(`Successfully indexed: ${recipe.url}`);
       }
       else {
         console.log(`Failed to index: ${recipe.url}`);
       }
+      */
     }
   }
   catch (error) {
