@@ -4,16 +4,22 @@ const { promisify } = require('util');
 const fs = require('fs');
 const elasticsearch = require('elasticsearch');
 
+const {
+  INDICES: {
+    recipesIndex
+  },
+  ES_ENDPOINT
+} = require('../../src/utils/constants');
+
 const readDirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 
 const client = new elasticsearch.Client({
-  // host: 'https://search-presearch-wiki-y54jqrsrtnje57wd5ogbpliuiy.us-west-1.es.amazonaws.com',
-  host: 'http://localhost:9200',
+  host: ES_ENDPOINT,
   log: 'trace'
 });
 
-const SOURCE_PATH = `${__dirname}/../../../scraping/pinchOfYum/recipes`;
+const SOURCE_PATH = `${__dirname}/../../../../recipes/pinchOfYumRecipes`;
 
 async function main() {
   try {
@@ -30,7 +36,8 @@ async function main() {
           recipeUrl: recipe.url,
           name: 'Pinch of Yum'
         },
-        servings: 'servings' in recipe ? recipe.servings.match(/\d+/) ? parseInt(recipe.servings.match(/\d+/)[0]) : null : null
+        servings: 'servings' in recipe ? recipe.servings.match(/\d+/) ? parseInt(recipe.servings.match(/\d+/)[0]) : null : null,
+        createdAt: new Date(),
       };
     });
 
@@ -38,10 +45,11 @@ async function main() {
 
     for (let recipe of recipes) {
       const res = await client.index({
-        index: 'recipe-app-recipes-index',
+        index: recipesIndex,
         type: 'recipe',
         body: recipe
       });
+    }
 
       /*
       if (res.created) {
@@ -51,7 +59,6 @@ async function main() {
         console.log(`Failed to index: ${recipe.url}`);
       }
       */
-    }
   }
   catch (error) {
     console.error(error);

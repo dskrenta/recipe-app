@@ -4,6 +4,5 @@ module.exports = {
   INDICES: {
     recipesIndex: 'recipe-app-recipes-index'
   },
-  // ES_ENDPOINT: 'https://search-octograde-fpz5otht3b3tbslivwa5xcdvle.us-west-1.es.amazonaws.com'
-  ES_ENDPOINT: 'http://localhost:9200'
+  ES_ENDPOINT: 'https://search-recipe-app-index-da5mmsuw3zxwga4l4rxyrryvu4.us-west-1.es.amazonaws.com'
 };

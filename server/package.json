@@ -17,6 +17,7 @@
     "graphql": "^14.0.2"
   },
   "devDependencies": {
+    "graceful-fs": "^4.1.11",
     "nodemon": "^1.18.4"
   }
 }
