@@ -19,7 +19,7 @@ const client = new elasticsearch.Client({
   log: 'trace'
 });
 
-const SOURCE_PATH = `${__dirname}/../../../../recipes/pinchOfYumRecipes`;
+const SOURCE_PATH = `${__dirname}/../../../../recipes/chowhoundRecipes`;
 
 async function main() {
   try {
@@ -31,13 +31,12 @@ async function main() {
 
       return {
         ...recipe,
+        directions: recipe.directions.map(direction => direction.replace('\n', '')),
         provider: {
-          siteUrl: 'https://pinchofyum.com',
-          recipeUrl: recipe.url,
-          name: 'Pinch of Yum'
+          siteUrl: 'https://chowhound.com',
+          name: 'Chowhound'
         },
-        servings: 'servings' in recipe ? recipe.servings.match(/\d+/) ? parseInt(recipe.servings.match(/\d+/)[0]) : null : null,
-        createdAt: new Date(),
+        createdAt: new Date()
       };
     });
 
