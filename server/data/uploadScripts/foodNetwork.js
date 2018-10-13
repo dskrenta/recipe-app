@@ -4,50 +4,49 @@ const { promisify } = require('util');
 const fs = require('graceful-fs');
 const elasticsearch = require('elasticsearch');
 
+const {
+  INDICES: {
+    recipesIndex
+  },
+  ES_ENDPOINT
+} = require('../../src/utils/constants');
+
 const readDirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 
-/*
 const client = new elasticsearch.Client({
-  // host: 'https://search-presearch-wiki-y54jqrsrtnje57wd5ogbpliuiy.us-west-1.es.amazonaws.com',
-  host: 'http://localhost:9200',
+  host: ES_ENDPOINT,
   log: 'trace'
 });
-*/
 
-const SOURCE_PATH = `${__dirname}/../../../scraping/foodNetwork/recipes`;
+const SOURCE_PATH = `${__dirname}/../../../../recipes/foodNetworkRecipes`;
 
 async function main() {
   try {
     const files = await readDirAsync(SOURCE_PATH);
     const fileContentsPromise = files.map(file => readFileAsync(`${SOURCE_PATH}/${file}`, 'utf-8'));
     const fileContents = await Promise.all(fileContentsPromise);
-    
-    for (let i = 0; i < fileContents.length; i++) {
-      console.log(files[i]);
-      JSON.parse(fileContents[i]);
-    }
+    const recipes = fileContents.map(contents => {
+      const parsedRecipe = JSON.parse(contents);
+      return {
+        ...parsedRecipe,
+        image: parsedRecipe.image === 'http:data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' ? null : parsedRecipe.image,
+        directions: parsedRecipe.directions.filter(direction => !direction.startsWith('Photograph by')),
+        url: parsedRecipe.provider.recipeUrl,
+        createdAt: new Date(),
+        level: parsedRecipe.level ? parsedRecipe.level.toLowerCase() : null
+      };
+    })
 
-    /*
-    const recipes = fileContents.map(fileContent => {
-      // const recipe = JSON.parse(JSON.stringify(fileContent));
-      // const recipe = JSON.parse(fileContent)
-      // return recipe;
-      return JSON.stringify(fileContent);
-    });
+    // console.log(recipes);
 
-    console.log(recipes);
-    */
-
-    /*
     for (let recipe of recipes) {
       const res = await client.index({
-        index: 'recipe-app-recipes-index',
+        index: recipesIndex,
         type: 'recipe',
         body: recipe
       });
     }
-    */
   }
   catch (error) {
     console.error(error);
