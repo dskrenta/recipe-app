@@ -1,8 +1,8 @@
 'use strict';
 
 const {
-  INDICES: { 
-    recipesIndex 
+  INDICES: {
+    recipesIndex
   }
 } = require('../utils/constants');
 const flattenResponse = require('../utils/flattenResponse');
@@ -12,11 +12,11 @@ async function searchRecipes({ client, query, pagination }) {
     const res = await client.search({
       index: recipesIndex,
       type: 'recipe',
-      from: pagination.offset, 
-      size: pagination.limit, 
+      from: pagination.offset,
+      size: pagination.limit,
       body: {
         query: {
-          match: {
+          fuzzy: {
             title: query
           }
         }
@@ -24,7 +24,7 @@ async function searchRecipes({ client, query, pagination }) {
     });
 
     return flattenResponse({ res, array: true, total: true });
-  } 
+  }
   catch (error) {
     console.error(error);
   }
