@@ -7,7 +7,7 @@ const schema = require('./schema');
 const resolvers = require('./resolvers');
 const { ES_ENDPOINT } = require('./utils/constants');
 
-const PORT = process.env.PORT || 4000;
+const DEFAULT_PORT = 4000;
 
 const client = new elasticsearch.Client({
   host: ES_ENDPOINT,
@@ -24,6 +24,6 @@ const server = new ApolloServer({
   }
 });
 
-server.listen({ port: PORT }).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+server.listen({ port: process.env.PORT || DEFAULT_PORT }).then(({ url }) => {
+  console.log(`Server ready at ${url}`);
 });
