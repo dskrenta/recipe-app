@@ -7,7 +7,7 @@ const schema = require('./schema');
 const resolvers = require('./resolvers');
 const { ES_ENDPOINT } = require('./utils/constants');
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 const client = new elasticsearch.Client({
   host: ES_ENDPOINT,
@@ -15,8 +15,8 @@ const client = new elasticsearch.Client({
 });
 
 const server = new ApolloServer({
-  typeDefs: schema, 
-  resolvers, 
+  typeDefs: schema,
+  resolvers,
   context: ({ req }) => {
     return {
       client

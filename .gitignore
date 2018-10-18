@@ -123,3 +123,6 @@ buck-out/
 /ios/Pods/
 google-services.json
 GoogleService-Info.plist
+
+# Deploy
+deploy.zip

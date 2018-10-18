@@ -3,9 +3,6 @@
 const elasticsearch = require('elasticsearch');
 
 const {
-  INDICES: {
-    recipesIndex
-  },
   ES_ENDPOINT
 } = require('../src/utils/constants');
 
@@ -20,9 +17,14 @@ const client = new elasticsearch.Client({
 
 async function main() {
   try {
-    // const recipe = getRecipe({ client, id: '' });
+    const recipe = await getRecipe({ client, id: 'GzM0b2YB6ZvqHrriZQlP' });
+    console.log(recipe);
+
     const recommendedRecipesResults = await recommendedRecipes({ client, pagination: { offset: 0, limit: 10 } });
     console.log(recommendedRecipesResults);
+
+    const searchResults = await searchRecipes({ client, pagination: { offset: 0, limit: 10 }, query: 'meatloaf' });
+    console.log(searchResults);
   }
   catch (error) {
     console.error(error);
