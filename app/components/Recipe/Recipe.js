@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
+import Recipes from '../Recipes/Recipes';
 
 class Recipe extends React.Component {
   constructor(props) {
@@ -12,7 +13,8 @@ class Recipe extends React.Component {
 
     if (recipe.ingredients) {
       this.state = {
-        checks: Array(recipe.ingredients.length).fill(0)
+        checks: Array(recipe.ingredients.length).fill(0),
+        modifier: 1
       }
     }
   }
@@ -21,6 +23,42 @@ class Recipe extends React.Component {
     const newChecks = this.state.checks;
     newChecks[i] = !newChecks[i];
     this.setState({ checks: newChecks });
+  }
+
+  directionHeading = ({ item, i }) => {
+    this.setState({ modifier: i });
+    console.log("MODIFIED");
+    return (
+      <Text key={i} style={styles.subheading}>{item.substring(1)}:</Text>
+    )
+  }
+
+  renderDirections = (directions) => {
+    let mod = -1;
+    let dirs = [];
+
+    directions.map((item, i) => {
+      let dir;
+      if (item.startsWith('#')) {
+        mod = i;
+        dir = (
+          <Text style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+        );
+      }
+      else {
+        dir = (
+          <View style={styles.listItem}>
+            <View style={styles.step}>
+              <Text style={styles.stepNum}>{i - mod}</Text>
+            </View>
+            <Text style={styles.listItemText}>{item}</Text>
+          </View>
+        );
+      }
+      dirs.push(dir);
+    })
+
+    return dirs
   }
 
   render() {
@@ -45,7 +83,7 @@ class Recipe extends React.Component {
             <Icon name="bookmark-o" size={25} color="#666" />
           </TouchableHighlight>
         </View>
-        <ScrollView 
+        <ScrollView
           style={styles.contain}
         >
           <View style={styles.innerContain}>
@@ -100,23 +138,25 @@ class Recipe extends React.Component {
                 <View style={styles.descContain}>
                   <Text style={styles.sectionTitlePad}>Ingredients</Text>
                   {recipe.ingredients.map((item, i) => (
-                    <TouchableHighlight
-                      key={i}
-                      onPress={() => {this.toggleCheck(i)}}
-                      underlayColor="transparent"
-                      style={{flex: 1}}
-                    >
-                      <View style={styles.checkbox}>
-                        <IconMd
-                          name={this.state.checks[i] ? "checkbox-marked" : "checkbox-blank-outline"} 
-                          color={this.state.checks[i] ? '#2c6' : '#333'} 
-                          size={20} 
-                        />
-                        <View style={styles.itemTextContain}>
-                          <Text style={styles.itemText}>{item}</Text>
-                        </View>
-                      </View>
-                    </TouchableHighlight>
+                    item.startsWith('#')
+                      ? <Text key={i} style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+                      : <TouchableHighlight
+                          key={i}
+                          onPress={() => {this.toggleCheck(i)}}
+                          underlayColor="transparent"
+                          style={{flex: 1}}
+                        >
+                          <View style={styles.checkbox}>
+                            <IconMd
+                              name={this.state.checks[i] ? "checkbox-marked" : "checkbox-blank-outline"}
+                              color={this.state.checks[i] ? '#2c6' : '#555'}
+                              size={20}
+                            />
+                            <View style={styles.itemTextContain}>
+                              <Text style={styles.itemText}>{item}</Text>
+                            </View>
+                          </View>
+                        </TouchableHighlight>
                   ))}
                   <TouchableHighlight
                     onPress={() => {}}
@@ -133,14 +173,23 @@ class Recipe extends React.Component {
               {recipe.directions &&
                 <View style={styles.descContain}>
                   <Text style={styles.sectionTitlePad}>Directions</Text>
-                  {recipe.directions.map((item, i) => (
-                    <View key={i} style={styles.listItem}>
-                      <View style={styles.step}>
-                        <Text style={styles.stepNum}>{i + 1}</Text>
-                      </View>
-                      <Text style={styles.listItemText}>{item}</Text>
-                    </View>
-                  ))}
+                  {/*recipe.directions.map((item, i) => {
+                    let num = i + 1 - this.state.modifier;
+                    if (item.startsWith('#')) {
+                      this.directionHeading.bind(item, i)
+                    }
+                    else {
+                      return (
+                        <View key={i} style={styles.listItem}>
+                          <View style={styles.step}>
+                            <Text style={styles.stepNum}>{num}</Text>
+                          </View>
+                          <Text style={styles.listItemText}>{item}</Text>
+                        </View>
+                      )
+                    }
+                  })*/}
+                  {this.renderDirections(recipe.directions)}
                 </View>
               }
             </View>
@@ -249,11 +298,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: 5,
+    color: '#555'
   },
   sectionTitlePad: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#555',
     marginBottom: 10
   },
   listItem: {
@@ -341,7 +392,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
-    marginRight: 15,
+    marginRight: 10,
+  },
+  subheading: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 10,
+    color: '#555'
   }
 })
 

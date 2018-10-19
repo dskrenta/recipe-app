@@ -10,102 +10,116 @@ const { width, height } = Dimensions.get('window');
 const RecipeCard = ({ recipe }) => (
   <View style={styles.contain}>
     <View style={styles.overflow}>
-      <View style={styles.imageContain}>
-        <Image source={{uri: recipe.image}} style={styles.image} />
-        <View style={styles.saveContain}>
-          <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
-        </View>
-        <View style={styles.ratingContain}>
-          <View style={styles.ratingRow}>
-            <IconMd name="star" size={25} color="orange" />
-            <Text style={styles.ratingText}>{recipe.rating}</Text>
+      {recipe.image &&
+        <View style={styles.imageContain}>
+          <Image source={{uri: recipe.image}} style={styles.image} />
+          <View style={styles.saveContain}>
+            <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
           </View>
+          {recipe.rating &&
+            <View style={styles.ratingContain}>
+              <View style={styles.ratingRow}>
+                <IconMd name="star" size={25} color="orange" />
+                <Text style={styles.ratingText}>{recipe.rating}</Text>
+              </View>
+            </View>
+          }
         </View>
-      </View>
+      }
       <View style={styles.titleContain}>
-        {/*<View style={styles.ratingCircle}>
-          <View style={styles.ratingRow}>
-            <IconMd name="star" size={25} color="orange" />
-            <Text style={styles.ratingText}>{recipe.rating}</Text>
-          </View>
-        </View>*/}
         <Text style={styles.title}>{recipe.title}</Text>
         <View style={styles.titleSubrow}>
-          <View style={styles.courseTag}>
-            <Text style={styles.course}>{recipe.course}</Text>
-          </View>
-          <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
+          {recipe.course &&
+            <View style={styles.courseTag}>
+              <Text style={styles.course}>{recipe.course}</Text>
+            </View>
+          }
+          {recipe.cuisine &&
+            <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
+          }
         </View>
       </View>
-      {/*<View style={styles.ratingRow}>
-        <IconMd name="star" size={25} color="orange" style={styles.ratingStars} />
-        <Text style={styles.ratingText}>{recipe.rating}</Text>
-      </View>*/}
-      {/*<View style={styles.colorRow}>
-        <View style={styles.colorItem}>
-          <Text style={styles.colorItemText}>Easy</Text>
-        </View>
-        <View style={[styles.colorItem, {borderRightWidth: 1, borderLeftWidth: 1}]}>
-          <Text style={styles.colorItemText}>{recipe.cuisine}</Text>
-        </View>
-        <View style={styles.colorItem}>
-          <Text style={styles.colorItemText}>{recipe.course}</Text>
-        </View>
-      </View>*/}
       <View style={styles.bottomRow}>
-        <View style={styles.bottomItem}>
-          <Text style={styles.statText}>{recipe.totalTime}</Text>
-          <Text style={styles.statSpan}>Minutes</Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <Text style={styles.statText}>{recipe.servings}</Text>
-          <Text style={styles.statSpan}>Servings</Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-          <Text style={styles.statSpan}>Calories</Text>
-        </View>
+        {recipe.totalTime &&
+          <View style={styles.bottomItem}>
+            <Text style={styles.statText}>{recipe.totalTime}</Text>
+            <Text style={styles.statSpan}>Minutes</Text>
+          </View>
+        }
+        {recipe.servings &&
+          <View style={styles.bottomItem}>
+            <Text style={styles.statText}>{recipe.servings}</Text>
+            <Text style={styles.statSpan}>Servings</Text>
+          </View>
+        }
+        {recipe.nutrition && recipe.nutrition.calories &&
+          <View style={styles.bottomItem}>
+            <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+            <Text style={styles.statSpan}>Calories</Text>
+          </View>
+        }
       </View>
-      <View style={styles.descContain}>
-        <Text style={styles.descTitle}>Description</Text>
-        <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
-      </View>
-      {/*<View style={styles.row}>
-        <IconIon name="md-stopwatch" size={20} color="#333" style={{marginRight: 5}} />
-        <Text style={styles.statSpan1}>{recipe.totalTime}</Text>
-        <Text style={styles.statSpan}> Minutes</Text>
-        <IconIon name="md-restaurant" size={20} color="#333" style={{marginLeft: 15, marginRight: 5}} />
-        <Text style={styles.statSpan1}>{recipe.servings}</Text>
-        <Text style={styles.statSpan}> Servings</Text>
-      </View>*/}
-      {/*<View style={styles.colorRow}>
-        <View style={[styles.colorItem, {backgroundColor: '#66e599'}]}>
-          <Text style={styles.colorItemText}>EASY</Text>
+      {recipe.description &&
+        <View style={styles.descContain}>
+          <Text style={styles.descTitle}>Description</Text>
+          <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
         </View>
-        <View style={[styles.colorItem, {backgroundColor: '#3bde7c'}]}>
-          <Text style={styles.colorItemText}>{recipe.cuisine.toUpperCase()}</Text>
-        </View>
-        <View style={[styles.colorItem, {backgroundColor: '#2c6'}]}>
-          <Text style={styles.colorItemText}>{recipe.course.toUpperCase()}</Text>
-        </View>
-      </View>*/}
-      {/*<View style={styles.bottomRow}>
-        <View style={styles.bottomItem}>
-          <IconIon name="md-stopwatch" size={30} color="#2c6" />
-          <Text style={styles.statSpan}>{recipe.totalTime}<Text style={styles.statSpan}> minutes</Text></Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <IconMd name="restaurant" size={30} color="#2c6" />
-          <Text style={styles.statSpan}>{recipe.servings}<Text style={styles.statSpan}> servings</Text></Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <IconMdc name="fire" size={30} color="#2c6" />
-          <Text style={styles.statSpan}>{recipe.nutrition.calories}<Text style={styles.statSpan}> calories</Text></Text>
-        </View>
-      </View>*/}
+      }
     </View>
   </View>
 );
+
+/*<View style={styles.row}>
+  <IconIon name="md-stopwatch" size={20} color="#333" style={{marginRight: 5}} />
+  <Text style={styles.statSpan1}>{recipe.totalTime}</Text>
+  <Text style={styles.statSpan}> Minutes</Text>
+  <IconIon name="md-restaurant" size={20} color="#333" style={{marginLeft: 15, marginRight: 5}} />
+  <Text style={styles.statSpan1}>{recipe.servings}</Text>
+  <Text style={styles.statSpan}> Servings</Text>
+</View>*/
+/*<View style={styles.colorRow}>
+  <View style={[styles.colorItem, {backgroundColor: '#66e599'}]}>
+    <Text style={styles.colorItemText}>EASY</Text>
+  </View>
+  <View style={[styles.colorItem, {backgroundColor: '#3bde7c'}]}>
+    <Text style={styles.colorItemText}>{recipe.cuisine.toUpperCase()}</Text>
+  </View>
+  <View style={[styles.colorItem, {backgroundColor: '#2c6'}]}>
+    <Text style={styles.colorItemText}>{recipe.course.toUpperCase()}</Text>
+  </View>
+</View>*/
+/*<View style={styles.bottomRow}>
+  <View style={styles.bottomItem}>
+    <IconIon name="md-stopwatch" size={30} color="#2c6" />
+    <Text style={styles.statSpan}>{recipe.totalTime}<Text style={styles.statSpan}> minutes</Text></Text>
+  </View>
+  <View style={styles.bottomItem}>
+    <IconMd name="restaurant" size={30} color="#2c6" />
+    <Text style={styles.statSpan}>{recipe.servings}<Text style={styles.statSpan}> servings</Text></Text>
+  </View>
+  <View style={styles.bottomItem}>
+    <IconMdc name="fire" size={30} color="#2c6" />
+    <Text style={styles.statSpan}>{recipe.nutrition.calories}<Text style={styles.statSpan}> calories</Text></Text>
+  </View>
+</View>*/
+/*
+<View style={styles.ratingRow}>
+  <IconMd name="star" size={25} color="orange" style={styles.ratingStars} />
+  <Text style={styles.ratingText}>{recipe.rating}</Text>
+</View>*/
+/*<View style={styles.colorRow}>
+  <View style={styles.colorItem}>
+    <Text style={styles.colorItemText}>Easy</Text>
+  </View>
+  <View style={[styles.colorItem, {borderRightWidth: 1, borderLeftWidth: 1}]}>
+    <Text style={styles.colorItemText}>{recipe.cuisine}</Text>
+  </View>
+  <View style={styles.colorItem}>
+    <Text style={styles.colorItemText}>{recipe.course}</Text>
+  </View>
+</View>
+*/
+
 
 const styles = StyleSheet.create({
   contain: {
@@ -296,7 +310,8 @@ const styles = StyleSheet.create({
   descTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: 5,
+    color: '#555'
   },
   descText: {
     fontSize: 15
