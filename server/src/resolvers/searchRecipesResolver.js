@@ -1,6 +1,5 @@
 'use strict';
 
-const flattenResponse = require('../utils/flattenResponse');
 const searchRecipes = require('../models/searchRecipes');
 
 async function searchRecipesResolver({ client, args: { query, pagination } }) {

@@ -1,6 +1,5 @@
 'use strict';
 
-const flattenResponse = require('../utils/flattenResponse');
 const getRecipe = require('../models/getRecipe');
 
 async function getRecipeResolver({ client, args: { id } }) {
