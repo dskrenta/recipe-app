@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 
 import SearchWrap from '../Common/SearchWrap';
 import RecipeCard from '../Common/RecipeCard';
@@ -112,30 +114,39 @@ const samples = [
   }
 ]
 
-const Recipes = ({ navigation }) => (
-  <SafeAreaView>
-    <SearchWrap navigation={navigation}>
-      <View style={styles.carouselContain}>
-        <ScrollView
-          style={styles.scrollView}
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          pagingEnabled
-        >
-          {samples.map((recipe, i) => (
-            <TouchableHighlight
-              onPress={() => {navigation.navigate('Recipe', { recipe })}}
-              underlayColor="transparent"
-              key={i}
-            >
-              <RecipeCard key={i} recipe={recipe} />
-            </TouchableHighlight>
-          ))}
-        </ScrollView>
-      </View>
-    </SearchWrap>
-  </SafeAreaView>
-);
+const Recipes = ({ navigation, data: { loading, error, recipes } }) => {
+  // console.log("DATA: ", data)
+  if (loading) return <Text>LOADING...</Text>;
+  if (error) {
+    console.log("ERROR", error);
+    return <Text>ERROR</Text>;
+  }
+  console.log("DATA: ", recipes);
+  return (
+    <SafeAreaView>
+      <SearchWrap navigation={navigation}>
+        <View style={styles.carouselContain}>
+          <ScrollView
+            style={styles.scrollView}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            pagingEnabled
+          >
+            {samples.map((recipe, i) => (
+              <TouchableHighlight
+                onPress={() => {navigation.navigate('Recipe', { recipe })}}
+                underlayColor="transparent"
+                key={i}
+              >
+                <RecipeCard key={i} recipe={recipe} />
+              </TouchableHighlight>
+            ))}
+          </ScrollView>
+        </View>
+      </SearchWrap>
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
   carouselContain: {
@@ -146,4 +157,25 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Recipes;
+const RECIPE_QUERY = gql`
+  query recommendedRecipes($pagination: Pagination) {
+    recommendedRecipes(pagination: $pagination) {
+      Recipe {
+        title
+      }
+    }
+  }
+`
+
+export default graphql(RECIPE_QUERY, {
+  options() {
+    return {
+      variables: {
+        pagination: {
+          offset: 0,
+          limit: 10
+        }
+      }
+    };
+  }
+})(Recipes);
