@@ -76,15 +76,20 @@ const schema = gql`
     image: String
   }
 
-  type Pagination {
+  type Results {
+    total: Int
+    results: [Recipe]!
+  }
+
+  input Pagination {
     offset: Int
     limit: Int
   }
 
   type Query {
-    getRecipe(id: ID!): [Recipe]!
-    searchRecipes(query: String!, pagination: Pagination): [Recipe]!
-    recommendedRecipes(pagination: Pagination): [Recipe]!
+    getRecipe(id: ID!): Recipe!
+    searchRecipes(query: String!, pagination: Pagination): Results!
+    recommendedRecipes(pagination: Pagination): Results!
   }
 `;
 
