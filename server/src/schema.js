@@ -76,7 +76,7 @@ const schema = gql`
     image: String
   }
 
-  type Pagination {
+  input Pagination {
     offset: Int
     limit: Int
   }

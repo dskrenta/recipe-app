@@ -160,11 +160,22 @@ const styles = StyleSheet.create({
 const RECIPE_QUERY = gql`
   query recommendedRecipes($pagination: Pagination) {
     recommendedRecipes(pagination: $pagination) {
-      recipe {
+      Recipe {
         title
       }
     }
   }
 `
 
-export default graphql(RECIPE_QUERY)(Recipes);
+export default graphql(RECIPE_QUERY, {
+  options() {
+    return {
+      variables: {
+        pagination: {
+          offset: 0,
+          limit: 10
+        }
+      }
+    };
+  }
+})(Recipes);

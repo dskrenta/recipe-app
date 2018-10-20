@@ -4,6 +4,8 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link'
 
 import Recipes from '../Recipes/Recipes';
 import Random from '../Random/Random';
@@ -14,10 +16,27 @@ import ShoppingList from '../ShoppingList/ShoppingList';
 
 console.disableYellowBox = true;
 
-const httpLink = createHttpLink({ uri: 'http://recipe-app-server.us-west-1.elasticbeanstalk.com/' });
+// const httpLink = createHttpLink({ uri: 'http://recipe-app-server.us-west-1.elasticbeanstalk.com/graphql' });
+const httpLink = createHttpLink({ uri: 'http://localhost:4000/graphql' });
+
+const errorLink = onError(({ networkError, graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    );
+  }
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
+const link = ApolloLink.from([
+  errorLink,
+  httpLink
+])
 
 const client = new ApolloClient({
-  link: httpLink,
+  link,
   cache: new InMemoryCache()
 })
 

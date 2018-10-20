@@ -6,7 +6,8 @@ const recommendedRecipes = require('../models/recommendedRecipes');
 async function recommendedRecipeResolver({ client, args: { pagination } }) {
   try {
     const recipes = await recommendedRecipes({ client, pagination });
-    return flattenResponse({ res: recipes, array: true, total: true });
+    console.log(recipes);
+    return recipes;
   }
   catch (error) {
     console.error(error);
