@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
-import Recipes from '../Recipes/Recipes';
+
+import recipeImage from '../../utils/recipeImage';
 
 class Recipe extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class Recipe extends React.Component {
       }
       else {
         dir = (
-          <View style={styles.listItem}>
+          <View key={i} style={styles.listItem}>
             <View style={styles.step}>
               <Text style={styles.stepNum}>{i - mod}</Text>
             </View>
@@ -59,6 +60,28 @@ class Recipe extends React.Component {
     })
 
     return dirs
+  }
+
+  renderDifficulty = (recipe) => {
+    const score = recipe.directions.length + recipe.ingredients.length;
+    let difficulty;
+    
+    if (score < 10) {
+      difficulty = 'Easy'
+    }
+    else if (score < 16) {
+      difficulty = 'Medium'
+    }
+    else {
+      difficulty = 'Hard'
+    }
+  
+    return (
+      <View style={styles.bottomItem}>
+        <Text style={styles.statText}>{difficulty}</Text>
+        <Text style={styles.statSpan}>Difficulty</Text>
+      </View>
+    )
   }
 
   render() {
@@ -88,7 +111,7 @@ class Recipe extends React.Component {
         >
           <View style={styles.innerContain}>
             <View style={styles.imageContain}>
-              {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
+              {recipe.image && <Image source={{uri: recipeImage(recipe.image)}} style={styles.image} />}
               {recipe.rating && recipe.image &&
                 <View style={styles.ratingContain}>
                   <View style={styles.ratingRow}>
@@ -121,11 +144,13 @@ class Recipe extends React.Component {
                     <Text style={styles.statSpan}>Servings</Text>
                   </View>
                 }
-                {recipe.nutrition && recipe.nutrition.calories &&
-                  <View style={styles.bottomItem}>
-                    <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-                    <Text style={styles.statSpan}>Calories</Text>
-                  </View>
+                {recipe.nutrition
+                  ? recipe.nutrition.calories &&
+                    <View style={styles.bottomItem}>
+                      <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                      <Text style={styles.statSpan}>Calories</Text>
+                    </View>
+                  : this.renderDifficulty(recipe)
                 }
               </View>
               {recipe.description &&

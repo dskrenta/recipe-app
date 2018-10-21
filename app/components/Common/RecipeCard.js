@@ -4,70 +4,97 @@ import IconMd from 'react-native-vector-icons/MaterialIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
+import recipeImage from '../../utils/recipeImage';
 
 const { width, height } = Dimensions.get('window');
 
-const RecipeCard = ({ recipe }) => (
-  <View style={styles.contain}>
-    <View style={styles.overflow}>
-      {recipe.image &&
-        <View style={styles.imageContain}>
-          <Image source={{uri: recipe.image}} style={styles.image} />
-          <View style={styles.saveContain}>
-            <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
-          </View>
-          {recipe.rating &&
-            <View style={styles.ratingContain}>
-              <View style={styles.ratingRow}>
-                <IconMd name="star" size={25} color="orange" />
-                <Text style={styles.ratingText}>{recipe.rating}</Text>
+const RecipeCard = ({ recipe }) => {
+  renderDifficulty = (recipe) => {
+    const score = recipe.directions.length + recipe.ingredients.length;
+    let difficulty;
+    
+    if (score < 10) {
+      difficulty = 'Easy'
+    }
+    else if (score < 16) {
+      difficulty = 'Medium'
+    }
+    else {
+      difficulty = 'Hard'
+    }
+  
+    return (
+      <View style={styles.bottomItem}>
+        <Text style={styles.statText}>{difficulty}</Text>
+        <Text style={styles.statSpan}>Difficulty</Text>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.contain}>
+      <View style={styles.overflow}>
+        {recipe.image &&
+          <View style={styles.imageContain}>
+            <Image source={{uri: recipeImage(recipe.image)}} style={styles.image} />
+            <View style={styles.saveContain}>
+              <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
+            </View>
+            {recipe.rating &&
+              <View style={styles.ratingContain}>
+                <View style={styles.ratingRow}>
+                  <IconMd name="star" size={25} color="orange" />
+                  <Text style={styles.ratingText}>{recipe.rating}</Text>
+                </View>
               </View>
+            }
+          </View>
+        }
+        <View style={styles.titleContain}>
+          <Text style={styles.title}>{recipe.title}</Text>
+          <View style={styles.titleSubrow}>
+            {recipe.course &&
+              <View style={styles.courseTag}>
+                <Text style={styles.course}>{recipe.course}</Text>
+              </View>
+            }
+            {recipe.cuisine &&
+              <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
+            }
+          </View>
+        </View>
+        <View style={styles.bottomRow}>
+          {recipe.totalTime &&
+            <View style={styles.bottomItem}>
+              <Text style={styles.statText}>{recipe.totalTime}</Text>
+              <Text style={styles.statSpan}>Minutes</Text>
             </View>
           }
-        </View>
-      }
-      <View style={styles.titleContain}>
-        <Text style={styles.title}>{recipe.title}</Text>
-        <View style={styles.titleSubrow}>
-          {recipe.course &&
-            <View style={styles.courseTag}>
-              <Text style={styles.course}>{recipe.course}</Text>
+          {recipe.servings &&
+            <View style={styles.bottomItem}>
+              <Text style={styles.statText}>{recipe.servings}</Text>
+              <Text style={styles.statSpan}>Servings</Text>
             </View>
           }
-          {recipe.cuisine &&
-            <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
+          {recipe.nutrition 
+            ? recipe.nutrition.calories &&
+                <View style={styles.bottomItem}>
+                  <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                  <Text style={styles.statSpan}>Calories</Text>
+                </View>
+            : this.renderDifficulty(recipe)
           }
         </View>
-      </View>
-      <View style={styles.bottomRow}>
-        {recipe.totalTime &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.totalTime}</Text>
-            <Text style={styles.statSpan}>Minutes</Text>
-          </View>
-        }
-        {recipe.servings &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.servings}</Text>
-            <Text style={styles.statSpan}>Servings</Text>
-          </View>
-        }
-        {recipe.nutrition && recipe.nutrition.calories &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-            <Text style={styles.statSpan}>Calories</Text>
+        {recipe.description &&
+          <View style={styles.descContain}>
+            <Text style={styles.descTitle}>Description</Text>
+            <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
           </View>
         }
       </View>
-      {recipe.description &&
-        <View style={styles.descContain}>
-          <Text style={styles.descTitle}>Description</Text>
-          <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
-        </View>
-      }
     </View>
-  </View>
-);
+  );
+}
 
 /*<View style={styles.row}>
   <IconIon name="md-stopwatch" size={20} color="#333" style={{marginRight: 5}} />
@@ -138,7 +165,8 @@ const styles = StyleSheet.create({
   },
   overflow: {
     overflow: 'hidden',
-    flex: 1
+    flex: 1,
+    paddingBottom: 10
   },
   imageContain: {
     borderTopLeftRadius: 10,
@@ -305,7 +333,7 @@ const styles = StyleSheet.create({
   descContain: {
     padding: 20,
     paddingTop: 0,
-    paddingBottom: 20
+    paddingBottom: 10
   },
   descTitle: {
     fontSize: 16,

@@ -114,14 +114,11 @@ const samples = [
   }
 ]
 
-const Recipes = ({ navigation, data: { loading, error, recipes } }) => {
+const Recipes = ({ navigation, data: { loading, error, recommendedRecipes } }) => {
   // console.log("DATA: ", data)
   if (loading) return <Text>LOADING...</Text>;
-  if (error) {
-    console.log("ERROR", error);
-    return <Text>ERROR</Text>;
-  }
-  console.log("DATA: ", recipes);
+  if (error) return <Text>ERROR</Text>;
+  console.log("DATA: ", recommendedRecipes.results)
   return (
     <SafeAreaView>
       <SearchWrap navigation={navigation}>
@@ -132,7 +129,7 @@ const Recipes = ({ navigation, data: { loading, error, recipes } }) => {
             horizontal
             pagingEnabled
           >
-            {samples.map((recipe, i) => (
+            {recommendedRecipes.results.map((recipe, i) => (
               <TouchableHighlight
                 onPress={() => {navigation.navigate('Recipe', { recipe })}}
                 underlayColor="transparent"
@@ -157,17 +154,30 @@ const styles = StyleSheet.create({
   }
 })
 
-const RECIPE_QUERY = gql`
+const RECIPES_QUERY = gql`
   query recommendedRecipes($pagination: Pagination) {
     recommendedRecipes(pagination: $pagination) {
-      Recipe {
+      total
+      results {
+        image
+        rating
         title
+        course
+        cuisine
+        totalTime
+        servings
+        nutrition {
+          calories
+        }
+        description
+        ingredients
+        directions
       }
     }
   }
 `
 
-export default graphql(RECIPE_QUERY, {
+export default graphql(RECIPES_QUERY, {
   options() {
     return {
       variables: {
