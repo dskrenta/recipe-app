@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensions, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
@@ -17,6 +17,25 @@ class Recipe extends React.Component {
         checks: Array(recipe.ingredients.length).fill(0),
         modifier: 1
       }
+    }
+  }
+
+  addToCart = async () => {
+    try {
+      const recipe = this.props.navigation.getParam('recipe', {});
+      const newItems = recipe.ingredients.filter((item, i) => this.state.checks[i]);
+      const cart = await AsyncStorage.getItem('shoppingList');
+
+      if (cart !== null) {
+        const newCart = JSON.parse(cart).concat(newItems);
+        await AsyncStorage.setItem('shoppingList', JSON.stringify(newCart));
+      }
+      else {
+        await AsyncStorage.setItem('shoppingList', JSON.stringify(newItems));
+      }
+    }
+    catch (e) {
+      console.error(e);
     }
   }
 
@@ -191,7 +210,7 @@ class Recipe extends React.Component {
                         </TouchableHighlight>
                   ))}
                   <TouchableHighlight
-                    onPress={() => {}}
+                    onPress={this.addToCart}
                     underlayColor="transparent"
                     style={styles.addToCartButton}
                   >

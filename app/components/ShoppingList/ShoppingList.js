@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, ScrollView, TextInput, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 
 import SearchWrap from '../Common/SearchWrap';
 
-list = [
+OLDlist = [
   '10 to 12 cups reduced-sodium or homemade chicken broth*',
   '1 medium onion, chopped (about 1 1/2 cups)',
   '2 1/2 cups risotto rice (see note)',
@@ -20,39 +20,62 @@ class ShoppingList extends React.Component {
     super(props);
 
     this.state = {
-      list: list,
-      checks: Array(list.length).fill(0),
+      list: [],
+      checks: Array(1).fill(0),
       value: ''
     }
   }
 
-  toggleCheck = (i) => {
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {this.getList()}
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
+  }
+
+  getList = async () => {
+    let list = [];
+    let checks = [];
+    const [lis, che] = await AsyncStorage.multiGet(['shoppingList', 'shoppingChecks']);
+    if (lis !== null) list = JSON.parse(lis[1]);
+    if (che !== null) checks = JSON.parse(che[1]);
+    this.setState({ list, checks });
+  }
+
+  toggleCheck = async (i) => {
     const newChecks = this.state.checks;
     newChecks[i] = !newChecks[i];
     this.setState({ checks: newChecks });
+    await AsyncStorage.setItem('shoppingChecks', JSON.stringify(newChecks), (e) => {console.log(e)})
   }
 
-  delete = (i) => {
+  delete = async (i) => {
     const newChecks = this.state.checks;
     const newList = this.state.list;
     newChecks.splice(i,1);
     newList.splice(i,1);
     this.setState({ checks: newChecks, list: newList });
+    await AsyncStorage.multiSet([
+      ['shoppingList', JSON.stringify(newList)], 
+      ['shoppingChecks', JSON.stringify(newChecks)]], 
+      (e) => {console.log(e)}
+    )
   }
 
-  addItem = () => {
+  addItem = async () => {
     const newList = [...this.state.list, this.state.value];
     const newChecks = [...this.state.checks, 0];
     this.setState({
       checks: newChecks,
       list: newList,
       value: ''
-    })
-  }
-
-  onSubmit = () => {
-    const newList = [...this.state.list, this.state.value]
-    this.setState({ value: '', list: newList })
+    });
+    console.log(newList);
+    await AsyncStorage.setItem('shoppingList', JSON.stringify(newList), (e) => {console.log(e)})
   }
 
   render() {
@@ -66,7 +89,7 @@ class ShoppingList extends React.Component {
             </View>
             <ScrollView style={styles.scrollView}>
               <View style={styles.innerScroll}>
-                {this.state.list.map((item, i) => (
+                {(this.state.list.length > 0) && this.state.list.map((item, i) => (
                   <View key={i} style={styles.item}>
                     <TouchableHighlight
                       onPress={() => {this.toggleCheck(i)}}
@@ -102,7 +125,7 @@ class ShoppingList extends React.Component {
                   style={styles.addInput}
                   value={this.state.value}
                   onChangeText={(value) => {this.setState({ value })}}
-                  onSubmitEditing={this.onSubmit}
+                  onSubmitEditing={this.addItem}
                   underlineColorAndroid="transparent"
                 />
                 <TouchableHighlight
