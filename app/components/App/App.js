@@ -55,7 +55,7 @@ const Tabs = createBottomTabNavigator(
       screen: Recipe
     },
     ShoppingList: {
-      screen: (props) => <ShoppingList {...props} screenProps={{key: Date.now()}} />
+      screen: ShoppingList
     }
   },
   {
