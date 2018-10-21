@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TouchableHighlight, ScrollView } from 'react-na
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import Loading from './Loading';
+import NoResults from './NoResults';
 import RecipeCard from './RecipeCard';
 
 const SearchResults = ({ navigation, query, data: { loading, error, searchRecipes }}) => {
-  if (loading) return <Text>Loading...</Text>
-  if (error) return <Text>ERROR {query}</Text>
+  if (loading) return <Loading />
+  if (error) return <NoResults />
   console.log(searchRecipes)
   return (
     <ScrollView

@@ -6,6 +6,8 @@ import { graphql } from 'react-apollo';
 
 import SearchWrap from '../Common/SearchWrap';
 import RecipeCard from '../Common/RecipeCard';
+import Loading from '../Common/Loading';
+import NoResults from '../Common/NoResults';
 
 const samples = [
   {
@@ -114,15 +116,14 @@ const samples = [
   }
 ]
 
-const Recipes = ({ navigation, data: { loading, error, recommendedRecipes } }) => {
-  // console.log("DATA: ", data)
-  if (loading) return <Text>LOADING...</Text>;
-  if (error) return <Text>ERROR</Text>;
-  console.log("DATA: ", recommendedRecipes.results)
-  return (
-    <SafeAreaView>
-      <SearchWrap navigation={navigation}>
-        <View style={styles.carouselContain}>
+const Recipes = ({ navigation, data: { loading, error, recommendedRecipes } }) => (
+  <SafeAreaView>
+    <SearchWrap navigation={navigation}>
+    { loading 
+      ? <Loading />
+      : error 
+      ? <NoResults />
+      : <View style={styles.carouselContain}>
           <ScrollView
             style={styles.scrollView}
             showsHorizontalScrollIndicator={false}
@@ -140,10 +141,10 @@ const Recipes = ({ navigation, data: { loading, error, recommendedRecipes } }) =
             ))}
           </ScrollView>
         </View>
-      </SearchWrap>
-    </SafeAreaView>
-  );
-}
+      }
+    </SearchWrap>
+  </SafeAreaView>
+)
 
 const styles = StyleSheet.create({
   carouselContain: {

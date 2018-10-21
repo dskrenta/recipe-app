@@ -43,7 +43,7 @@ class Recipe extends React.Component {
       if (item.startsWith('#')) {
         mod = i;
         dir = (
-          <Text style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+          <Text style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}</Text>
         );
       }
       else {
@@ -114,9 +114,7 @@ class Recipe extends React.Component {
         </View>
         <ScrollView
           style={styles.contain}
-          ref={(ref) => {
-            this.myScroll = ref
-          }}
+          ref={ref => this.myScroll = ref}
         >
           <View style={styles.innerContain}>
             <View style={styles.imageContain}>
@@ -173,7 +171,7 @@ class Recipe extends React.Component {
                   <Text style={styles.sectionTitlePad}>Ingredients</Text>
                   {recipe.ingredients.map((item, i) => (
                     item.startsWith('#')
-                      ? <Text key={i} style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+                      ? <Text key={i} style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}</Text>
                       : <TouchableHighlight
                           key={i}
                           onPress={() => {this.toggleCheck(i)}}
@@ -207,22 +205,6 @@ class Recipe extends React.Component {
               {recipe.directions &&
                 <View style={styles.descContain}>
                   <Text style={styles.sectionTitlePad}>Directions</Text>
-                  {/*recipe.directions.map((item, i) => {
-                    let num = i + 1 - this.state.modifier;
-                    if (item.startsWith('#')) {
-                      this.directionHeading.bind(item, i)
-                    }
-                    else {
-                      return (
-                        <View key={i} style={styles.listItem}>
-                          <View style={styles.step}>
-                            <Text style={styles.stepNum}>{num}</Text>
-                          </View>
-                          <Text style={styles.listItemText}>{item}</Text>
-                        </View>
-                      )
-                    }
-                  })*/}
                   {this.renderDirections(recipe.directions)}
                 </View>
               }
