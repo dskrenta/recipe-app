@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import SearchFilters from './SearchFilters';
 import RecipeCard from './RecipeCard';
+import SearchResults from './SearchResults';
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
 
 const samples = [
@@ -130,7 +131,7 @@ class SearchWrap extends React.Component {
   }
 
   onFocus = () => {
-    this.setState({ showSearch: true, backIcon: true });
+    this.setState({ showSearch: true, showResults: false, backIcon: true });
     Animated.timing(this.state.fade, {
       toValue: 1,
       duration: 500
@@ -139,7 +140,7 @@ class SearchWrap extends React.Component {
 
   endSearch = () => {
     this.searchBar.blur();
-    this.setState({ backIcon: false });
+    this.setState({ backIcon: false, value: '' });
     Animated.timing(this.state.fade, {
       toValue: 0,
       duration: 500
@@ -195,26 +196,7 @@ class SearchWrap extends React.Component {
             },
           ]}
         >
-          {this.state.showResults
-            ? <ScrollView
-                style={styles.scrollView}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                pagingEnabled
-              >
-                {samples.map((recipe, i) => (
-                  <TouchableHighlight
-                    onPress={() => {navigation.navigate('Recipe', { recipe })}}
-                    underlayColor="transparent"
-                  >
-                    <RecipeCard key={i} recipe={recipe} />
-                  </TouchableHighlight>
-                ))}
-              </ScrollView>
-            : <ScrollView style={styles.filterScroll}>
-                <SearchFilters />
-              </ScrollView>
-          }
+          {this.state.showResults && <SearchResults navigation={navigation} query={this.state.value} />}
         </Animated.View>
         <View style={styles.children}>
           {children}

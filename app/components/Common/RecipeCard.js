@@ -10,8 +10,10 @@ const { width, height } = Dimensions.get('window');
 
 const RecipeCard = ({ recipe }) => {
   renderDifficulty = (recipe) => {
-    const score = recipe.directions.length + recipe.ingredients.length;
     let difficulty;
+    let score = 0;
+    if (recipe.directions) score += recipe.directions.length;
+    if (recipe.ingredients) score += recipe.ingredients.length;
     
     if (score < 10) {
       difficulty = 'Easy'

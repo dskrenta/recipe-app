@@ -120,6 +120,7 @@ const Saved = ({ navigation }) => (
         >
           {samples.map((recipe, i) => (
             <TouchableHighlight
+              key={i}
               onPress={() => {navigation.navigate('Recipe', { recipe })}}
               underlayColor="transparent"
             >

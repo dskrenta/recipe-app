@@ -84,6 +84,12 @@ class Recipe extends React.Component {
     )
   }
 
+  componentWillReceiveProps() {
+    const recipe = this.props.navigation.getParam('recipe', {});
+    this.setState({ checks: Array(recipe.ingredients.length).fill(0) });
+    this.myScroll && this.myScroll.scrollTo({x: 0, y: 0, animated: false});
+  }
+
   render() {
     const { navigation } = this.props;
     const recipe = navigation.getParam('recipe', {});
@@ -108,6 +114,9 @@ class Recipe extends React.Component {
         </View>
         <ScrollView
           style={styles.contain}
+          ref={(ref) => {
+            this.myScroll = ref
+          }}
         >
           <View style={styles.innerContain}>
             <View style={styles.imageContain}>
@@ -301,7 +310,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 20
   },
   statText: {
     marginBottom: 3,
