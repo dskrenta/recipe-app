@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const NoResults = () => (
   <View style={styles.contain}>
     <Icon name="warning" size={40} color="#666" style={styles.icon} />
-    <Text style={styles.text}>No Recipes Found...</Text>
+    <Text style={styles.text}>No Recipes Found</Text>
   </View>
 )
 

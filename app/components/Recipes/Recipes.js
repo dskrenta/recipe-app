@@ -136,7 +136,7 @@ const Recipes = ({ navigation, data: { loading, error, recommendedRecipes } }) =
                 underlayColor="transparent"
                 key={i}
               >
-                <RecipeCard key={i} recipe={recipe} />
+                <RecipeCard recipe={recipe} navigation={navigation} />
               </TouchableHighlight>
             ))}
           </ScrollView>

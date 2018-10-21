@@ -20,20 +20,22 @@ class RecipeCard extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {this.checkSaved()}
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
+  }
+
   checkSaved = async () => {
     let saved = false;
     const value = await AsyncStorage.getItem(recipeHash(this.props.recipe));
     if (value !== null) saved = JSON.parse(value);
     this.setState({ saved });
-    /*
-    let saved = false;
-    const value = await AsyncStorage.getItem('saved');
-    if (value !== null) {
-      const savedArr = JSON.parse(value);
-      saved = savedArr[recipeHash(this.props.recipe)];
-    };
-    this.setState({ saved });
-    */
   }
   
   renderDifficulty = (recipe) => {
@@ -64,7 +66,7 @@ class RecipeCard extends React.Component {
     const value = await AsyncStorage.getItem(recipeHash(this.props.recipe));
     if (value === 'true') {
       this.setState({ saved: false });
-      await AsyncStorage.setItem(recipeHash(this.props.recipe), 'false');
+      await AsyncStorage.removeItem(recipeHash(this.props.recipe));
     }
     else {
       this.setState({ saved: true });

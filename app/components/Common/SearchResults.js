@@ -24,7 +24,7 @@ const SearchResults = ({ navigation, query, data: { loading, error, searchRecipe
           onPress={() => {navigation.navigate('Recipe', { recipe })}}
           underlayColor="transparent"
         >
-          <RecipeCard recipe={recipe} />
+          <RecipeCard recipe={recipe} navigation={navigation} />
         </TouchableHighlight>
       ))}
     </ScrollView>

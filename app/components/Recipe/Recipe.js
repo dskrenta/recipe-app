@@ -6,17 +6,52 @@ import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import recipeImage from '../../utils/recipeImage';
+import recipeHash from '../../utils/recipeHash';
 
 class Recipe extends React.Component {
   constructor(props) {
     super(props);
     const recipe = this.props.navigation.getParam('recipe', {});
+    this.checkSaved();
 
     if (recipe.ingredients) {
       this.state = {
         checks: Array(recipe.ingredients.length).fill(0),
-        modifier: 1
+        modifier: 1,
+        saved: false
       }
+    }
+  }
+
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {this.checkSaved()}
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
+  }
+
+  checkSaved = async () => {
+    let saved = false;
+    const recipe = this.props.navigation.getParam('recipe', {});
+    const value = await AsyncStorage.getItem(recipeHash(recipe));
+    if (value !== null) saved = JSON.parse(value);
+    this.setState({ saved });
+  }
+
+  toggleSave = async () => {
+    const recipe = this.props.navigation.getParam('recipe', {});
+    const value = await AsyncStorage.getItem(recipeHash(recipe));
+    if (value === 'true') {
+      this.setState({ saved: false });
+      await AsyncStorage.removeItem(recipeHash(recipe));
+    }
+    else {
+      this.setState({ saved: true });
+      await AsyncStorage.setItem(recipeHash(recipe), 'true');
     }
   }
 
@@ -124,11 +159,14 @@ class Recipe extends React.Component {
           </TouchableHighlight>
           <Text style={styles.headerTitle}>Recipe Details</Text>
           <TouchableHighlight
-            onPress={() => {navigation.goBack()}}
+            onPress={() => {this.toggleSave()}}
             underlayColor="transparent"
             style={styles.touchable}
           >
-            <Icon name="bookmark-o" size={25} color="#666" />
+            {this.state.saved == true
+              ? <Icon name="bookmark" size={25} color="#4da6ff" />
+              : <Icon name="bookmark-o" size={25} color="#666" />
+            }
           </TouchableHighlight>
         </View>
         <ScrollView

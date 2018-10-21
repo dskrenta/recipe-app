@@ -124,7 +124,7 @@ const Random = ({ navigation }) => (
               onPress={() => {navigation.navigate('Recipe', { recipe })}}
               underlayColor="transparent"
             >
-              <RecipeCard key={i} recipe={recipe} />
+              <RecipeCard recipe={recipe} navigation={navigation} />
             </TouchableHighlight>
           ))}
         </ScrollView>
