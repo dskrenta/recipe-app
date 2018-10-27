@@ -24,6 +24,8 @@ class ShoppingList extends React.Component {
       checks: Array(1).fill(0),
       value: ''
     }
+
+    console.log(this.state.list)
   }
 
   componentDidMount() {
@@ -41,9 +43,9 @@ class ShoppingList extends React.Component {
     let list = [];
     let checks = [];
     const [lis, che] = await AsyncStorage.multiGet(['shoppingList', 'shoppingChecks']);
-    if (lis !== null) list = JSON.parse(lis[1]);
-    if (che !== null) checks = JSON.parse(che[1]);
-    this.setState({ list, checks });
+    if (lis !== null && lis[1] !== null) list = JSON.parse(lis[1]);
+    if (che !== null && che[1] !== null) checks = JSON.parse(che[1]);
+    this.setState({ list: list, checks: checks });
   }
 
   toggleCheck = async (i) => {
@@ -80,6 +82,7 @@ class ShoppingList extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    console.log(this.state.list)
     return (
       <SafeAreaView>
         <SearchWrap>

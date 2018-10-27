@@ -10,10 +10,6 @@ const tabs = [
     icon: 'clipboard-list'
   },
   {
-    name: 'Random',
-    icon: 'question-circle'
-  },
-  {
     name: 'ShoppingList',
     icon: 'shopping-cart'
   },
@@ -22,6 +18,13 @@ const tabs = [
     icon: 'bookmark'
   }
 ];
+
+/*
+  {
+    name: 'Random',
+    icon: 'question-circle'
+  }, 
+*/
 
 const TabBar = ({ navigation }) => {
   const activeRoute = navigation.state.routes[navigation.state.index].routeName;
@@ -37,7 +40,7 @@ const TabBar = ({ navigation }) => {
           <View
             style={styles.tab}
           >
-            {i % 2
+            {i === 2
               ? <Icon
                   name={tab.icon}
                   color={activeRoute === tab.name ? '#2c6' : '#aaa'}

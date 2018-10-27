@@ -8,7 +8,6 @@ import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link'
 
 import Recipes from '../Recipes/Recipes';
-import Random from '../Random/Random';
 import Saved from '../Saved/Saved';
 import Recipe from '../Recipe/Recipe';
 import TabBar from '../TabBar/TabBar';
@@ -44,9 +43,6 @@ const Tabs = createBottomTabNavigator(
   {
     Recipes: {
       screen: Recipes
-    },
-    Random: {
-      screen: Random
     },
     Saved: {
       screen: Saved
