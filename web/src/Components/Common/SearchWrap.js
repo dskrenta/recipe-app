@@ -19,8 +19,8 @@ class SearchWrap extends React.Component {
   }
 
   handleSubmit = (e) => {
-    this.setState({ showResults: true });
     e.preventDefault();
+    this.setState({ showSearch: true, showResults: true });
   }
 
   handleFocus = () => {
@@ -38,18 +38,18 @@ class SearchWrap extends React.Component {
   render() {
     const { children } = this.props;
     return (
-      <div>
+      <div className={styles.contain}>
         <form onSubmit={this.handleSubmit}>
           <div className={styles.searchContain}>
             {this.state.showSearch
               ? <button
                   onClick={this.handleBack}
-                  className={styles.searchButton}
+                  className={styles.backButton}
                 >
-                  <FaArrowLeft />
+                  <FaArrowLeft color="#2c6" size={20} />
                 </button>
-              : <button className={styles.searchButton}>
-                  <FaSearch />
+              : <button className={styles.backButton}>
+                  <FaSearch color="#2c6" size={20} />
                 </button>
             }
             <input
@@ -58,27 +58,25 @@ class SearchWrap extends React.Component {
               value={this.state.value}
               onChange={this.handleChange}
               onFocus={this.handleFocus}
+              placeholder="Search Recipes"
             />
-            {this.state.value !== '' &&
-              <button
-                onClick={this.handleClear}
-                className={styles.searchButton}
-              >
-                <FaTimesCircle />
-              </button>
-            }
+            <button
+              onClick={this.handleClear}
+              className={styles.clearButton}
+              style={{ opacity: this.state.value !== '' ? 1 : 0 }}
+            >
+              <FaTimesCircle />
+            </button>
           </div>
         </form>
-        <div>
-          {this.state.showSearch &&
-            <div>
-              SEARCH
-              {this.state.showResults &&
-                <div>RESULTS</div>
-              }
-            </div>
-          }
-        </div>
+        {this.state.showSearch &&
+          <div className={styles.resultsContainer}>
+            SEARCH
+            {this.state.showResults &&
+              <div className={styles.resultsContain}>RESULTS</div>
+            }
+          </div>
+        }
         <div className={styles.children}>
           {children}
         </div>

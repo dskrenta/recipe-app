@@ -1,0 +1,127 @@
+.contain {
+  flex: 1;
+  margin: 5px 15px 10px;
+  background-color: white;
+  border-radius: 15px;
+  width: calc(100% - 30px);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+}
+.overflow {
+  overflow: hidden;
+  flex: 1;
+}
+.imageContain {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  flex: 1;
+  position: relative;
+}
+.image {
+  width: 100%;
+  height: calc((100% - 180px) / 2);
+  flex: 1;
+}
+.saveContain {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+}
+.saveIcon {
+  box-shadow: 0 1px 10px rgba(0,0,0,0.5);
+}
+.titleContain {
+  padding: 20px 20px 5px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+.titleSubrow {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  margin-top: 5px;
+}
+.courseTag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: #2c6;
+  margin-right: 8px;
+}
+.course {
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+}
+.cuisine {
+  font-size: 16px;
+  color: #333;
+}
+.ratingContain {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 40px;
+  width: 80px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ratingRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0;
+}
+.ratingText {
+  font-size: 18;
+  color: #666;
+  font-weight: bold;
+  margin: 0 5px;
+}
+.bottomRow {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  padding-left: 20px;
+}
+.bottomItem {
+  flex: 1;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px 0 10px;
+}
+.statText {
+  margin-bottom: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a5;
+}
+.statSpan {
+  color: #888;
+  font-size: 15px;
+}
+.descContain {
+  padding: 0 20px 20px;
+}
+.descTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+.descText {
+  font-size: 15px;
+}

@@ -1,0 +1,6 @@
+.contain {
+  display: flex;
+  flex-flow: row nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
