@@ -1,73 +1,155 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, Text, StyleSheet, Dimensions, AsyncStorage, TouchableHighlight } from 'react-native';
 import IconMd from 'react-native-vector-icons/MaterialIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 
 import { iPhoneStyle } from '../../utils/iPhoneStyle';
+import recipeImage from '../../utils/recipeImage';
+import recipeHash from '../../utils/recipeHash';
 
 const { width, height } = Dimensions.get('window');
 
-const RecipeCard = ({ recipe }) => (
-  <View style={styles.contain}>
-    <View style={styles.overflow}>
-      {recipe.image &&
-        <View style={styles.imageContain}>
-          <Image source={{uri: recipe.image}} style={styles.image} />
-          <View style={styles.saveContain}>
-            <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
+class RecipeCard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.checkSaved();
+
+    this.state = {
+      saved: false
+    }
+  }
+
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {this.checkSaved()}
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
+  }
+
+  checkSaved = async () => {
+    let saved = false;
+    const value = await AsyncStorage.getItem(recipeHash(this.props.recipe));
+    if (value !== null) saved = JSON.parse(value);
+    this.setState({ saved });
+  }
+  
+  renderDifficulty = (recipe) => {
+    let difficulty;
+    let score = 0;
+    if (recipe.directions) score += recipe.directions.length;
+    if (recipe.ingredients) score += recipe.ingredients.length;
+    
+    if (score < 10) {
+      difficulty = 'Easy'
+    }
+    else if (score < 16) {
+      difficulty = 'Medium'
+    }
+    else {
+      difficulty = 'Hard'
+    }
+  
+    return (
+      <View style={styles.bottomItem}>
+        <Text style={styles.statText}>{difficulty}</Text>
+        <Text style={styles.statSpan}>Difficulty</Text>
+      </View>
+    )
+  }
+
+  toggleSave = async () => {
+    const value = await AsyncStorage.getItem(recipeHash(this.props.recipe));
+    if (value === 'true') {
+      this.setState({ saved: false });
+      await AsyncStorage.removeItem(recipeHash(this.props.recipe));
+    }
+    else {
+      this.setState({ saved: true });
+      await AsyncStorage.setItem(recipeHash(this.props.recipe), 'true');
+    }
+  }
+
+  render() {
+    const { recipe } = this.props;
+    return (
+      <View style={styles.contain}>
+        <View style={styles.overflow}>
+          {recipe.image &&
+            <View style={styles.imageContain}>
+              <Image source={{uri: recipeImage(recipe.image)}} style={styles.image} />
+              <TouchableHighlight 
+                style={styles.saveContain}
+                onPress={() => {this.toggleSave()}}
+                underlayColor="transparent"
+              >
+                <View>
+                  {this.state.saved == true
+                    ? <IconFa name="bookmark" size={30} color="#4da6ff" style={styles.savedIcon} />
+                    : <IconFa name="bookmark-o" size={30} color="#fff" style={styles.saveIcon} />
+                  }
+                </View>
+              </TouchableHighlight>
+              {recipe.rating &&
+                <View style={styles.ratingContain}>
+                  <View style={styles.ratingRow}>
+                    <IconMd name="star" size={25} color="orange" />
+                    <Text style={styles.ratingText}>{recipe.rating}</Text>
+                  </View>
+                </View>
+              }
+            </View>
+          }
+          <View style={styles.titleContain}>
+            <Text style={styles.title}>{recipe.title}</Text>
+            <View style={styles.titleSubrow}>
+              {recipe.course &&
+                <View style={styles.courseTag}>
+                  <Text style={styles.course}>{recipe.course}</Text>
+                </View>
+              }
+              {recipe.cuisine &&
+                <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
+              }
+            </View>
           </View>
-          {recipe.rating &&
-            <View style={styles.ratingContain}>
-              <View style={styles.ratingRow}>
-                <IconMd name="star" size={25} color="orange" />
-                <Text style={styles.ratingText}>{recipe.rating}</Text>
+          <View style={styles.bottomRow}>
+            {recipe.totalTime &&
+              <View style={styles.bottomItem}>
+                <Text style={styles.statText}>{recipe.totalTime}</Text>
+                <Text style={styles.statSpan}>Minutes</Text>
               </View>
+            }
+            {recipe.servings &&
+              <View style={styles.bottomItem}>
+                <Text style={styles.statText}>{recipe.servings}</Text>
+                <Text style={styles.statSpan}>Servings</Text>
+              </View>
+            }
+            {recipe.nutrition 
+              ? recipe.nutrition.calories &&
+                  <View style={styles.bottomItem}>
+                    <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                    <Text style={styles.statSpan}>Calories</Text>
+                  </View>
+              : this.renderDifficulty(recipe)
+            }
+          </View>
+          {recipe.description &&
+            <View style={styles.descContain}>
+              <Text style={styles.descTitle}>Description</Text>
+              <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
             </View>
           }
         </View>
-      }
-      <View style={styles.titleContain}>
-        <Text style={styles.title}>{recipe.title}</Text>
-        <View style={styles.titleSubrow}>
-          {recipe.course &&
-            <View style={styles.courseTag}>
-              <Text style={styles.course}>{recipe.course}</Text>
-            </View>
-          }
-          {recipe.cuisine &&
-            <Text style={styles.cuisine}>{recipe.cuisine} Cuisine</Text>
-          }
-        </View>
       </View>
-      <View style={styles.bottomRow}>
-        {recipe.totalTime &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.totalTime}</Text>
-            <Text style={styles.statSpan}>Minutes</Text>
-          </View>
-        }
-        {recipe.servings &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.servings}</Text>
-            <Text style={styles.statSpan}>Servings</Text>
-          </View>
-        }
-        {recipe.nutrition && recipe.nutrition.calories &&
-          <View style={styles.bottomItem}>
-            <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-            <Text style={styles.statSpan}>Calories</Text>
-          </View>
-        }
-      </View>
-      {recipe.description &&
-        <View style={styles.descContain}>
-          <Text style={styles.descTitle}>Description</Text>
-          <Text numberOfLines={3} style={styles.descText}>{recipe.description}</Text>
-        </View>
-      }
-    </View>
-  </View>
-);
+    );
+  }
+}
 
 /*<View style={styles.row}>
   <IconIon name="md-stopwatch" size={20} color="#333" style={{marginRight: 5}} />
@@ -138,7 +220,8 @@ const styles = StyleSheet.create({
   },
   overflow: {
     overflow: 'hidden',
-    flex: 1
+    flex: 1,
+    paddingBottom: 10
   },
   imageContain: {
     borderTopLeftRadius: 10,
@@ -155,11 +238,25 @@ const styles = StyleSheet.create({
   saveContain: {
     position: 'absolute',
     top: 25,
-    right: 20
+    right: 25
   },
   saveIcon: {
     shadowColor: '#000',
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.9,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    textShadowOffset: {
+      width: 0,
+      height: 1
+    },
+    elevation: 5
+  },
+  savedIcon: {
+    shadowColor: '#000',
+    shadowOpacity: 0.7,
     shadowRadius: 10,
     shadowOffset: {
       width: 0,
@@ -305,7 +402,7 @@ const styles = StyleSheet.create({
   descContain: {
     padding: 20,
     paddingTop: 0,
-    paddingBottom: 20
+    paddingBottom: 10
   },
   descTitle: {
     fontSize: 16,

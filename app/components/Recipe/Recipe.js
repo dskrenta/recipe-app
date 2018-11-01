@@ -1,21 +1,76 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, ScrollView, Dimensions, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconMd from 'react-native-vector-icons/MaterialCommunityIcons';
-import Recipes from '../Recipes/Recipes';
+
+import recipeImage from '../../utils/recipeImage';
+import recipeHash from '../../utils/recipeHash';
 
 class Recipe extends React.Component {
   constructor(props) {
     super(props);
     const recipe = this.props.navigation.getParam('recipe', {});
+    this.checkSaved();
 
     if (recipe.ingredients) {
       this.state = {
         checks: Array(recipe.ingredients.length).fill(0),
-        modifier: 1
+        modifier: 1,
+        saved: false
       }
+    }
+  }
+
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {this.checkSaved()}
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
+  }
+
+  checkSaved = async () => {
+    let saved = false;
+    const recipe = this.props.navigation.getParam('recipe', {});
+    const value = await AsyncStorage.getItem(recipeHash(recipe));
+    if (value !== null) saved = JSON.parse(value);
+    this.setState({ saved });
+  }
+
+  toggleSave = async () => {
+    const recipe = this.props.navigation.getParam('recipe', {});
+    const value = await AsyncStorage.getItem(recipeHash(recipe));
+    if (value === 'true') {
+      this.setState({ saved: false });
+      await AsyncStorage.removeItem(recipeHash(recipe));
+    }
+    else {
+      this.setState({ saved: true });
+      await AsyncStorage.setItem(recipeHash(recipe), 'true');
+    }
+  }
+
+  addToCart = async () => {
+    try {
+      const recipe = this.props.navigation.getParam('recipe', {});
+      const newItems = recipe.ingredients.filter((item, i) => this.state.checks[i]);
+      const cart = await AsyncStorage.getItem('shoppingList');
+
+      if (cart !== null) {
+        const newCart = JSON.parse(cart).concat(newItems);
+        await AsyncStorage.setItem('shoppingList', JSON.stringify(newCart));
+      }
+      else {
+        await AsyncStorage.setItem('shoppingList', JSON.stringify(newItems));
+      }
+    }
+    catch (e) {
+      console.error(e);
     }
   }
 
@@ -42,12 +97,12 @@ class Recipe extends React.Component {
       if (item.startsWith('#')) {
         mod = i;
         dir = (
-          <Text style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+          <Text style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}</Text>
         );
       }
       else {
         dir = (
-          <View style={styles.listItem}>
+          <View key={i} style={styles.listItem}>
             <View style={styles.step}>
               <Text style={styles.stepNum}>{i - mod}</Text>
             </View>
@@ -59,6 +114,34 @@ class Recipe extends React.Component {
     })
 
     return dirs
+  }
+
+  renderDifficulty = (recipe) => {
+    const score = recipe.directions.length + recipe.ingredients.length;
+    let difficulty;
+    
+    if (score < 10) {
+      difficulty = 'Easy'
+    }
+    else if (score < 16) {
+      difficulty = 'Medium'
+    }
+    else {
+      difficulty = 'Hard'
+    }
+  
+    return (
+      <View style={styles.bottomItem}>
+        <Text style={styles.statText}>{difficulty}</Text>
+        <Text style={styles.statSpan}>Difficulty</Text>
+      </View>
+    )
+  }
+
+  componentWillReceiveProps() {
+    const recipe = this.props.navigation.getParam('recipe', {});
+    this.setState({ checks: Array(recipe.ingredients.length).fill(0) });
+    this.myScroll && this.myScroll.scrollTo({x: 0, y: 0, animated: false});
   }
 
   render() {
@@ -76,19 +159,23 @@ class Recipe extends React.Component {
           </TouchableHighlight>
           <Text style={styles.headerTitle}>Recipe Details</Text>
           <TouchableHighlight
-            onPress={() => {navigation.goBack()}}
+            onPress={() => {this.toggleSave()}}
             underlayColor="transparent"
             style={styles.touchable}
           >
-            <Icon name="bookmark-o" size={25} color="#666" />
+            {this.state.saved == true
+              ? <Icon name="bookmark" size={25} color="#4da6ff" />
+              : <Icon name="bookmark-o" size={25} color="#666" />
+            }
           </TouchableHighlight>
         </View>
         <ScrollView
           style={styles.contain}
+          ref={ref => this.myScroll = ref}
         >
           <View style={styles.innerContain}>
             <View style={styles.imageContain}>
-              {recipe.image && <Image source={{uri: recipe.image}} style={styles.image} />}
+              {recipe.image && <Image source={{uri: recipeImage(recipe.image)}} style={styles.image} />}
               {recipe.rating && recipe.image &&
                 <View style={styles.ratingContain}>
                   <View style={styles.ratingRow}>
@@ -121,11 +208,13 @@ class Recipe extends React.Component {
                     <Text style={styles.statSpan}>Servings</Text>
                   </View>
                 }
-                {recipe.nutrition && recipe.nutrition.calories &&
-                  <View style={styles.bottomItem}>
-                    <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
-                    <Text style={styles.statSpan}>Calories</Text>
-                  </View>
+                {recipe.nutrition
+                  ? recipe.nutrition.calories &&
+                    <View style={styles.bottomItem}>
+                      <Text style={styles.statText}>{recipe.nutrition.calories}</Text>
+                      <Text style={styles.statSpan}>Calories</Text>
+                    </View>
+                  : this.renderDifficulty(recipe)
                 }
               </View>
               {recipe.description &&
@@ -139,7 +228,7 @@ class Recipe extends React.Component {
                   <Text style={styles.sectionTitlePad}>Ingredients</Text>
                   {recipe.ingredients.map((item, i) => (
                     item.startsWith('#')
-                      ? <Text key={i} style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}:</Text>
+                      ? <Text key={i} style={[styles.subheading, i === 0 && {marginTop: 0}]}>{item.substring(1)}</Text>
                       : <TouchableHighlight
                           key={i}
                           onPress={() => {this.toggleCheck(i)}}
@@ -159,7 +248,7 @@ class Recipe extends React.Component {
                         </TouchableHighlight>
                   ))}
                   <TouchableHighlight
-                    onPress={() => {}}
+                    onPress={this.addToCart}
                     underlayColor="transparent"
                     style={styles.addToCartButton}
                   >
@@ -173,22 +262,6 @@ class Recipe extends React.Component {
               {recipe.directions &&
                 <View style={styles.descContain}>
                   <Text style={styles.sectionTitlePad}>Directions</Text>
-                  {/*recipe.directions.map((item, i) => {
-                    let num = i + 1 - this.state.modifier;
-                    if (item.startsWith('#')) {
-                      this.directionHeading.bind(item, i)
-                    }
-                    else {
-                      return (
-                        <View key={i} style={styles.listItem}>
-                          <View style={styles.step}>
-                            <Text style={styles.stepNum}>{num}</Text>
-                          </View>
-                          <Text style={styles.listItemText}>{item}</Text>
-                        </View>
-                      )
-                    }
-                  })*/}
                   {this.renderDirections(recipe.directions)}
                 </View>
               }
@@ -276,7 +349,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 20
   },
   statText: {
     marginBottom: 3,
