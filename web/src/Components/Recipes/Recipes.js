@@ -10,11 +10,51 @@ import RecipeCard from '../Common/RecipeCard';
 import styles from './Recipes.module.css'; 
 
 class Recipes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.swiper = null;
+  }
+
+  shouldLoadMore = (data, fetchMore) => {
+    const len = data.recommendedRecipes.results.length - 1;
+    const active = this.swiper.activeIndex;
+
+    if (active > len - 4) {
+      console.log("triggered")
+      console.log(len, active)
+      console.log(fetchMore)
+      fetchMore({
+        variables: {
+          offset: len
+        },
+        updateQuery: (prev, { newset }) => {
+          if (!newset) return prev;
+          console.log("PREV: ", prev)
+          console.log("FETCHED: ", newset)
+          const data = Object.assign({}, prev, {
+            recommendedRecipes: {
+              total: prev.recommendedRecipes.total,
+              results: [...prev.recommendedRecipes.results, ...newset.recommendedRecipes.results],
+              __typename: prev.recommendedRecipes.__typename
+            }
+          })
+          console.log("NEW DATA: ", data)
+          return data
+        }
+      })
+    }
+  }
+
   render() {
     const { navigation } = this.props;
     const params = {
       shouldSwiperUpdate: true,
-      wrapperClass: `${styles.wrapper}`
+      // rebuildOnUpdate: true,
+      wrapperClass: `${styles.wrapper}`,
+      on: {
+        'slideChange': () => {this.shouldLoadMore()}
+      },
+      ref: (node) => {if (node) this.swiper = node.swiper}
     }
     return (
       <SearchWrap>
@@ -26,13 +66,14 @@ class Recipes extends React.Component {
               limit: 10
             }
           }}
+          fetchPolicy="cache-and-network"
         >
-          {({ loading, error, data }) => {
+          {({ loading, error, data, fetchMore }) => {
             if (loading) return `Loading`;
             if (error) return `Error!: ${error}`;
             return (
               <div className={styles.contain}>
-                <Swiper {...params}>
+                <Swiper {...params} on={{'slideChange': () => {this.shouldLoadMore(data, fetchMore)}}}>
                   {data.recommendedRecipes && data.recommendedRecipes.results.map((recipe, i) => (
                     <RecipeCard key={i} recipe={recipe} navigation={navigation} />
                   ))}
