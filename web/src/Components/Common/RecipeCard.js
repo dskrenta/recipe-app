@@ -1,9 +1,9 @@
 import React from 'react';
-import { FaBookmark } from 'react-icons/fa';
+import { FaBookmark, FaStar } from 'react-icons/fa';
 
 import styles from './RecipeCard.module.css';
 import recipeImage from '../../utils/recipeImage';
-import recipeHash from '../../utils/recipeHash';
+// import recipeHash from '../../utils/recipeHash';
 
 class RecipeCard extends React.Component {
   constructor(props) {
@@ -59,20 +59,21 @@ class RecipeCard extends React.Component {
   }
 
   render() {
-    const { navigation, recipe } = this.props;
+    //  navigation,
+    const { recipe } = this.props;
     return (
-      <div className={styles.contain}>
+      <div className={`${styles.contain} swiper-slide`}>
         <div className={styles.overflow}>
           {recipe.image &&
             <div className={styles.imageContain}>
-              <img src={recipeImage(recipe.image)} className={styles.image} />
+              <img src={recipeImage(recipe.image)} className={styles.image} alt="" />
               <button 
                 className={styles.saveContain}
                 onClick={() => {this.toggleSave()}}
               >
                 <div>
-                  {this.state.saved == true
-                    ? <FaBookmark size={30} color="#4da6ff" className={styles.savedIcon} />
+                  {this.state.saved === true
+                    ? <FaBookmark size={30} color="#4da6ff" className={styles.saveIcon} />
                     : <FaBookmark size={30} color="#fff" className={styles.saveIcon} />
                   }
                 </div>
@@ -80,7 +81,7 @@ class RecipeCard extends React.Component {
               {recipe.rating &&
                 <div className={styles.ratingContain}>
                   <div className={styles.ratingRow}>
-                    <FaBookmark name="star" size={25} color="orange" />
+                    <FaStar size={22} color="orange" />
                     <span className={styles.ratingText}>{recipe.rating}</span>
                   </div>
                 </div>
@@ -125,7 +126,7 @@ class RecipeCard extends React.Component {
           {recipe.description &&
             <div className={styles.descContain}>
               <span className={styles.descTitle}>Description</span>
-              <span numberOfLines={3} className={styles.descText}>{recipe.description}</span>
+              <span className={styles.descText}>{recipe.description}</span>
             </div>
           }
         </div>

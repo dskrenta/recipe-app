@@ -1,14 +1,20 @@
 .contain {
   flex: 1;
-  margin: 5px 15px 10px;
+  margin: 3px 15px 10px;
   background-color: white;
-  border-radius: 15px;
-  width: calc(100% - 30px);
-  box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  width: calc(100vw - 30px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  max-width: 810px;
 }
 .overflow {
   overflow: hidden;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw - 30px);
+  max-width: 810px;
+  height: calc(100vh - 165px);
 }
 .imageContain {
   border-radius: 10px 10px 0 0;
@@ -18,16 +24,21 @@
 }
 .image {
   width: 100%;
-  height: calc((100% - 180px) / 2);
+  height: 100%;
+  object-fit: cover;
   flex: 1;
 }
 .saveContain {
   position: absolute;
   top: 25px;
   right: 20px;
+  outline: none;
+  border: none;
+  background: none;
 }
 .saveIcon {
-  box-shadow: 0 1px 10px rgba(0,0,0,0.5);
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 ); 
+  filter: drop-shadow( 0 2px 5px rgba(0,0,0,0.4) );
 }
 .titleContain {
   padding: 20px 20px 5px;
@@ -67,7 +78,7 @@
   top: 20px;
   left: 20px;
   height: 40px;
-  width: 80px;
+  padding: 0 12px 1px 14px;
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 2px 3px rgba(0,0,0,0.15);
@@ -83,7 +94,7 @@
   flex: 0;
 }
 .ratingText {
-  font-size: 18;
+  font-size: 18px;
   color: #666;
   font-weight: bold;
   margin: 0 5px;
@@ -94,11 +105,13 @@
   align-items: stretch;
   justify-content: space-between;
   padding-left: 20px;
+  padding-bottom: 10px;
 }
 .bottomItem {
   flex: 1;
   flex-grow: 1;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   padding: 8px 0 10px;
@@ -115,6 +128,8 @@
 }
 .descContain {
   padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
 }
 .descTitle {
   font-size: 16px;
@@ -124,4 +139,7 @@
 }
 .descText {
   font-size: 15px;
+  line-height: 17px;
+  max-height: 51px;
+  overflow: hidden;
 }
