@@ -34,7 +34,7 @@ async function main() {
     const data = flattenResponse({ res, array: true, total: true });
     let recipes = '';
     for (let recipe of data.results) {
-      recipes += `${recipe.title} ${recipe.servings ? `\ny: ${recipe.servings}` : '\ny: 0'} ${recipe.prepTime ? `\np: ${recipe.prepTime}` : '\np: 5'} \n${recipe.ingredients.map((elem, index) => !elem.startsWith('#') ? `i: ${elem.replace(/\d/g, '').replace('/', '').replace(/\(.*\)/, '').replace(/cup./g, '').replace(/tablespoon./g, '').replace(/teaspoon./, '').replace(/.pound./g, '').replace(/ounce./g, '').trim()} ${rand(1, 200)}\n` : '').join('')} \n`;
+      recipes += `r:\n${recipe.title} ${recipe.servings ? `\ny: ${recipe.servings}` : `\ny: ${rand(2, 10)}`} ${recipe.prepTime ? `\np: ${recipe.prepTime}` : `\np: ${rand(20, 60)}`} \n${recipe.ingredients.map((elem) => !elem.startsWith('#') ? `i: ${elem.replace(/\d/g, '').replace('/', '').replace(/\(.*\)/, '').replace(/cup./g, '').replace(/tablespoon./g, '').replace(/teaspoon./, '').replace(/.pound./g, '').replace(/ounce./g, '').trim()} ${rand(1, 200)}\n` : '').join('')}--- \n\n`;
     }
 
     await writeFileAsync(FILENAME, recipes);
