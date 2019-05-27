@@ -12,9 +12,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "apollo-server": "^2.0.7",
-    "elasticsearch": "^15.1.1",
-    "graphql": "^14.0.2"
+    "elasticsearch": "^16.0.0"
   },
   "devDependencies": {
     "graceful-fs": "^4.1.11",

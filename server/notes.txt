@@ -1,0 +1,3 @@
+Temp removed install:
+"apollo-server": "^2.0.7",
+"graphql": "^14.0.2"
