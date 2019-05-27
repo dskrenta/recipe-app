@@ -34,7 +34,7 @@ async function main() {
     const data = flattenResponse({ res, array: true, total: true });
     let recipes = '';
     for (let recipe of data.results) {
-      recipes += `${recipe.title} ${recipe.servings ? `\ny: ${recipe.servings}` : '\ny: 0'} ${recipe.prepTime ? `\np: ${recipe.prepTime}` : '\np: 5'} \n${recipe.ingredients.map((elem, index) => !elem.startsWith('#') ? `i: ${elem} ${rand(1, 200)}\n` : '').join('')} \n`;
+      recipes += `${recipe.title} ${recipe.servings ? `\ny: ${recipe.servings}` : '\ny: 0'} ${recipe.prepTime ? `\np: ${recipe.prepTime}` : '\np: 5'} \n${recipe.ingredients.map((elem, index) => !elem.startsWith('#') ? `i: ${elem.replace(/\d/g, '').replace('/', '').replace(/\(.*\)/, '').replace(/cup./g, '').replace(/tablespoon./g, '').replace(/teaspoon./, '').replace(/.pound./g, '').replace(/ounce./g, '').trim()} ${rand(1, 200)}\n` : '').join('')} \n`;
     }
 
     await writeFileAsync(FILENAME, recipes);
